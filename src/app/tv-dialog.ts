@@ -12,7 +12,7 @@ import { CastService } from './cast.service';
           <button class="icon-btn plain" (click)="closed.emit()" aria-label="Close">✕</button>
         </div>
 
-        @if (cast.supported) {
+        @if (cast.supported()) {
           @if (cast.state() === 'connected') {
             <p><strong>The scoreboard is on the TV.</strong> Keep entering scores here; the TV updates when you show a round.</p>
             <button class="btn dark block" (click)="cast.stop()">Stop casting</button>
