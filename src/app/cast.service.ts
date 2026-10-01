@@ -44,12 +44,24 @@ export class CastService {
   readonly state = signal<'idle' | 'connecting' | 'connected'>('idle');
   readonly error = signal<string | null>(null);
 
+  /** Bridge from the Quiz Night Android app, which casts with the native Cast SDK. */
+  private native = (window as any).QuizNightCast as
+    | { start(): void; send(json: string): void; stop(): void }
+    | undefined;
+
   constructor() {
     if (this.isReceiver) {
       this.startReceiver();
       return;
     }
-    if (this.configured && /Chrome\//.test(navigator.userAgent) && !/CriOS/.test(navigator.userAgent)) {
+    if (this.native) {
+      (window as any).__quizCastState = (state: 'idle' | 'connecting' | 'connected', error: string | null) => {
+        this.state.set(state);
+        this.error.set(error ? `Could not connect to the TV (${error}). Try again.` : null);
+        if (state === 'connected') this.send(this.quiz.quiz());
+      };
+      this.supported.set(true);
+    } else if (this.configured && /Chrome\//.test(navigator.userAgent) && !/CriOS/.test(navigator.userAgent)) {
       this.initSender();
     }
     effect(() => {
@@ -87,6 +99,10 @@ export class CastService {
   async start() {
     this.error.set(null);
     if (!this.supported()) return;
+    if (this.native) {
+      this.native.start();
+      return;
+    }
     try {
       await cast.framework.CastContext.getInstance().requestSession();
     } catch (e: any) {
@@ -102,10 +118,18 @@ export class CastService {
   }
 
   stop() {
+    if (this.native) {
+      this.native.stop();
+      return;
+    }
     cast.framework.CastContext.getInstance().endCurrentSession(true);
   }
 
   private send(q: unknown) {
+    if (this.native) {
+      this.native.send(JSON.stringify(q ?? null));
+      return;
+    }
     this.session?.sendMessage(NAMESPACE, q ?? null).catch(() => {
       // a dropped message is replaced by the next change
     });
