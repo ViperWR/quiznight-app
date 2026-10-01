@@ -1,0 +1,244 @@
+:root {
+  --ink: #0f0b09;
+  --ink-2: #1c1511;
+  --ink-3: #2a201a;
+  --cream: #f6eedb;
+  --cream-2: #e9dcbd;
+  --gold: #e4b23a;
+  --gold-hi: #ffd76a;
+  --gold-lo: #a97a17;
+  --sunset: #e0461f;
+  --sunset-deep: #9e1f22;
+  --muted: #b7a88b;
+
+  --font-display: 'Abril Fatface', Georgia, serif;
+  --font-script: 'Yellowtail', 'Brush Script MT', cursive;
+  --font-body: 'Montserrat', system-ui, sans-serif;
+
+  --gold-text: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 55%, var(--gold-lo) 100%);
+  --radius: 14px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.gold {
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.script {
+  font-family: var(--font-script);
+  color: var(--gold-hi);
+}
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px calc(32px + env(safe-area-inset-bottom));
+}
+
+.card {
+  background: var(--cream);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 2px solid var(--gold);
+  box-shadow:
+    inset 0 0 0 4px var(--cream),
+    inset 0 0 0 5px rgba(169, 122, 23, 0.5);
+}
+
+.card + .card {
+  margin-top: 16px;
+}
+
+.card h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+label.field {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+
+input[type='text'],
+input[type='number'] {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--cream-2);
+  background: #fffaf0;
+  color: var(--ink);
+}
+
+input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  background: linear-gradient(180deg, var(--gold-hi), var(--gold));
+  color: var(--ink);
+  box-shadow: 0 2px 0 var(--gold-lo);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn.sunset {
+  background: linear-gradient(180deg, #f2652e, var(--sunset));
+  color: var(--cream);
+  box-shadow: 0 2px 0 var(--sunset-deep);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--gold-hi);
+  border: 1.5px solid var(--gold);
+  box-shadow: none;
+}
+
+.btn.dark {
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: none;
+}
+
+.btn.block {
+  width: 100%;
+}
+
+.btn.small {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: 0.9rem;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-lo);
+  background: #fffaf0;
+  color: var(--ink);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.icon-btn.plain {
+  border-color: transparent;
+  background: transparent;
+  font-size: 1.1rem;
+  color: var(--ink-3);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.card .hint {
+  color: #6f6050;
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+  padding: 16px;
+}
+
+.dialog-backdrop .card {
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.dialog-backdrop ol {
+  padding-left: 1.2rem;
+  line-height: 1.5;
+}

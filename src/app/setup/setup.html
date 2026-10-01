@@ -1,0 +1,75 @@
+<header class="bar">
+  <a class="icon-btn back" routerLink="/" aria-label="Back">‹</a>
+  <h1 class="display gold">{{ editing ? 'Edit quiz' : 'New quiz' }}</h1>
+</header>
+
+<main class="page">
+  <section class="card">
+    <label class="field">
+      Quiz name
+      <input type="text" [value]="title()" (input)="title.set(str($event))" placeholder="Quiz Night" />
+    </label>
+
+    <div class="grid">
+      <div class="field">
+        <span class="label">Rounds</span>
+        <div class="stepper">
+          <button class="icon-btn" (click)="setRoundCount(rounds().length - 1)" aria-label="Fewer rounds">−</button>
+          <input type="number" inputmode="numeric" min="1" max="20" [value]="rounds().length" (change)="setRoundCount(num($event))" aria-label="Number of rounds" />
+          <button class="icon-btn" (click)="setRoundCount(rounds().length + 1)" aria-label="More rounds">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <span class="label">Questions per round</span>
+        <div class="stepper">
+          <button class="icon-btn" (click)="setQuestionsForAll(questionsForAll() - 1)" aria-label="Fewer questions">−</button>
+          <input type="number" inputmode="numeric" min="1" max="100" [value]="questionsForAll()" (change)="setQuestionsForAll(num($event))" aria-label="Questions per round" />
+          <button class="icon-btn" (click)="setQuestionsForAll(questionsForAll() + 1)" aria-label="More questions">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Rounds</h2>
+    <p class="hint">Rename rounds or give one a different number of questions. {{ totalQuestions() }} questions in total.</p>
+    <ol class="rounds">
+      @for (r of rounds(); track $index; let i = $index) {
+        <li>
+          <span class="num">{{ i + 1 }}</span>
+          <input type="text" class="name" [value]="r.name" (change)="setRound(i, { name: str($event) })" [attr.aria-label]="'Name of round ' + (i + 1)" />
+          <input type="number" class="q" inputmode="numeric" min="1" max="100" [value]="r.questions" (change)="setRound(i, { questions: num($event) })" [attr.aria-label]="'Questions in round ' + (i + 1)" />
+          <span class="qlabel">Qs</span>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>Teams</h2>
+    <form class="row add" (submit)="$event.preventDefault(); addTeam()">
+      <input type="text" [value]="teamName()" (input)="teamName.set(str($event))" placeholder="Team or player name" enterkeyhint="done" aria-label="Team name" />
+      <button class="btn small" type="submit" [disabled]="!teamName().trim()">Add</button>
+    </form>
+    @if (teams().length === 0) {
+      <p class="hint">No teams yet. Add at least one to start.</p>
+    }
+    <ul class="teams">
+      @for (t of teams(); track t.id) {
+        <li>
+          <input type="text" [value]="t.name" (change)="renameTeam(t.id, str($event))" [attr.aria-label]="'Rename ' + t.name" />
+          <button class="icon-btn plain" (click)="removeTeam(t.id)" [attr.aria-label]="'Remove ' + t.name">✕</button>
+        </li>
+      }
+    </ul>
+    @if (editing && teams().length > 0) {
+      <p class="hint">Removing a team also removes its scores.</p>
+    }
+  </section>
+
+  <div class="save">
+    <button class="btn sunset block" (click)="save()" [disabled]="!canSave() && !teamName().trim()">
+      {{ editing ? 'Save changes' : 'Start the quiz' }}
+    </button>
+  </div>
+</main>

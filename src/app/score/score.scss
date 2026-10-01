@@ -1,0 +1,121 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: calc(12px + env(safe-area-inset-top)) 16px 8px;
+}
+.back {
+  text-decoration: none;
+}
+h1 {
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.tv.live {
+  background: var(--sunset);
+  border-color: var(--sunset);
+  color: var(--cream);
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4px 16px 8px;
+  scrollbar-width: none;
+}
+.chip {
+  flex: none;
+  min-width: 48px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink-3);
+  background: var(--ink-2);
+  color: var(--cream-2);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.chip.done {
+  border-color: var(--gold-lo);
+  color: var(--gold-hi);
+}
+.chip.active {
+  background: linear-gradient(180deg, #f2652e, var(--sunset));
+  border-color: var(--sunset);
+  color: var(--cream);
+}
+.page {
+  padding-top: 4px;
+}
+.round-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.round-head h2 {
+  margin: 0;
+}
+.teams {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.teams li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--cream-2);
+}
+.name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+.score {
+  width: 3.4em;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  padding: 4px;
+  background: var(--ink);
+  color: var(--gold-hi);
+  border-color: var(--ink);
+}
+.score.empty {
+  background: #fffaf0;
+  border-color: var(--cream-2);
+}
+.icon-btn:disabled {
+  opacity: 0.3;
+}
+.actions {
+  position: sticky;
+  bottom: 0;
+  padding: 16px 0 calc(8px + env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, var(--ink) 30%);
+  margin-top: 8px;
+}
+.status {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: var(--gold-hi);
+  text-align: center;
+}
+.grow {
+  flex: 1;
+}
