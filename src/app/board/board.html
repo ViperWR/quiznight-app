@@ -50,7 +50,7 @@
       <a class="btn small dark" routerLink="/score">‹ Scores</a>
       <span class="spacer"></span>
       <button class="btn small ghost" (click)="showTv.set(true)">
-        {{ cast.state() === 'connected' ? 'On TV' : 'TV' }}
+        {{ onTv() ? 'On TV' : 'TV' }}
       </button>
       @if (canFullscreen) {
         <button class="btn small" (click)="toggleFullscreen()">{{ isFullscreen() ? 'Exit full screen' : 'Full screen' }}</button>

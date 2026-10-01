@@ -51,6 +51,11 @@ import { Sunset } from '../sunset';
           </p>
           <a class="btn sunset block" routerLink="/setup">Set up a quiz</a>
         </section>
+        <section class="card">
+          <h2>Is this the TV?</h2>
+          <p class="hint">Open this page in the TV's web browser and tap below to show only the scoreboard.</p>
+          <a class="btn dark block" routerLink="/tv">Use this screen as the TV</a>
+        </section>
       }
     </main>
   `,

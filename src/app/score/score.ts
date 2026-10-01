@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CastService } from '../cast.service';
+import { LiveService } from '../live.service';
 import { QuizService } from '../quiz.service';
 import { TvDialog } from '../tv-dialog';
 
@@ -13,6 +14,8 @@ import { TvDialog } from '../tv-dialog';
 export class Score {
   protected quizService = inject(QuizService);
   protected cast = inject(CastService);
+  private live = inject(LiveService);
+  protected onTv = computed(() => this.cast.state() === 'connected' || !!this.live.phoneCode());
   private router = inject(Router);
 
   protected q = this.quizService.quiz;

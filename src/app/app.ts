@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { CastService } from './cast.service';
 
@@ -13,6 +13,9 @@ export class App {
   private cast = inject(CastService);
 
   constructor() {
+    // The short TV address (…/quiznight-app/tv/) opens the TV pairing screen
+    if (/\/tv\/?(index\.html)?$/.test(location.pathname)) inject(Router).navigate(['/tv']);
+
     // Pick up a new deploy straight away; the quiz itself is kept in storage.
     const sw = inject(SwUpdate);
     if (sw.isEnabled) {

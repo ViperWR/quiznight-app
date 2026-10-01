@@ -3,8 +3,8 @@
     <a class="icon-btn back" routerLink="/" aria-label="Home">‹</a>
     <h1 class="display gold">{{ quiz.title }}</h1>
     <span class="spacer"></span>
-    <button class="btn ghost small tv" [class.live]="cast.state() === 'connected'" (click)="showTv.set(true)">
-      {{ cast.state() === 'connected' ? 'On TV' : 'TV' }}
+    <button class="btn ghost small tv" [class.live]="onTv()" (click)="showTv.set(true)">
+      {{ onTv() ? 'On TV' : 'TV' }}
     </button>
     <a class="btn small" routerLink="/board">Board</a>
   </header>

@@ -22,9 +22,13 @@ export class QuizService {
 
   readonly revealedCount = computed(() => this.quiz()?.revealed.filter(Boolean).length ?? 0);
 
+  /** Off on a TV showing someone else's quiz, so it never overwrites a quiz saved on this device. */
+  private persist = true;
+
   constructor() {
     effect(() => {
       const q = this.quiz();
+      if (!this.persist) return;
       try {
         if (q) localStorage.setItem(STORAGE_KEY, JSON.stringify(q));
         else localStorage.removeItem(STORAGE_KEY);
@@ -35,7 +39,7 @@ export class QuizService {
 
     // Keep a second window (e.g. a scoreboard on a TV/laptop screen) in sync.
     window.addEventListener('storage', (e) => {
-      if (e.key === STORAGE_KEY) this.quiz.set(this.parse(e.newValue));
+      if (e.key === STORAGE_KEY && this.persist) this.quiz.set(this.parse(e.newValue));
     });
   }
 
@@ -55,6 +59,12 @@ export class QuizService {
     } catch {
       return null;
     }
+  }
+
+  /** Show a quiz that lives on another device (TV mode): stop saving and start empty. */
+  displayOnly() {
+    this.persist = false;
+    this.quiz.set(null);
   }
 
   /** Replace state wholesale, e.g. from a cast connection. */

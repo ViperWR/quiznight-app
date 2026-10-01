@@ -20,12 +20,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx ng build --base-href "/${{ github.event.repository.name }}/"
-      # receiver.html is the page the Chromecast loads; 404.html serves the app
-      # shell for unknown paths; .nojekyll stops Pages running Jekyll
+      # receiver.html is the page the Chromecast loads; tv/ is the short address
+      # typed into a TV browser; 404.html serves the app shell for unknown paths;
+      # .nojekyll stops Pages running Jekyll
       - run: |
-          cp dist/quiznight-app/browser/index.html dist/quiznight-app/browser/404.html
-          cp dist/quiznight-app/browser/index.html dist/quiznight-app/browser/receiver.html
-          touch dist/quiznight-app/browser/.nojekyll
+          cd dist/quiznight-app/browser
+          cp index.html 404.html
+          cp index.html receiver.html
+          mkdir -p tv && cp index.html tv/index.html
+          touch .nojekyll
       # GitHub Pages serves the gh-pages branch (Settings > Pages > Deploy from a branch)
       - if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4

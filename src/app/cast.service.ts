@@ -109,6 +109,7 @@ export class CastService {
   }
 
   private async startReceiver() {
+    this.quiz.displayOnly();
     this.router.navigate(['/board'], { queryParams: { tv: 1 } });
     try {
       await loadScript(RECEIVER_SDK);

@@ -1,6 +1,7 @@
 import { Component, DestroyRef, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CastService } from '../cast.service';
+import { LiveService } from '../live.service';
 import { QuizService } from '../quiz.service';
 import { Sunset } from '../sunset';
 import { TvDialog } from '../tv-dialog';
@@ -14,6 +15,8 @@ import { TvDialog } from '../tv-dialog';
 export class Board {
   protected quizService = inject(QuizService);
   protected cast = inject(CastService);
+  private live = inject(LiveService);
+  protected onTv = computed(() => this.cast.state() === 'connected' || !!this.live.phoneCode());
 
   /** ?tv=1 — opened on a TV (cast receiver or second window): no host controls */
   readonly tv = input<string>();
