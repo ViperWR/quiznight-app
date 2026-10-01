@@ -26,7 +26,7 @@ jobs:
       - run: |
           cd dist/quiznight-app/browser
           cp index.html 404.html
-          cp index.html receiver.html
+          sed 's#</head>#<script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script></head>#' index.html > receiver.html
           mkdir -p tv && cp index.html tv/index.html
           touch .nojekyll
       # GitHub Pages serves the gh-pages branch (Settings > Pages > Deploy from a branch)

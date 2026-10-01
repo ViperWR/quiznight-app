@@ -92,7 +92,10 @@ export class CastService {
     } catch (e: any) {
       // 'cancel' = the host closed the device picker
       if (e !== 'cancel' && e?.code !== 'cancel') {
-        this.error.set('Could not connect to the TV. Check the phone and Chromecast are on the same Wi-Fi and try again.');
+        const code = typeof e === 'string' ? e : (e?.code ?? e?.message ?? 'unknown');
+        this.error.set(
+          `Could not connect to the TV (${code}). Check the phone and Chromecast are on the same Wi-Fi and try again.`,
+        );
       }
       this.state.set(this.session ? 'connected' : 'idle');
     }
@@ -112,7 +115,8 @@ export class CastService {
     this.quiz.displayOnly();
     this.router.navigate(['/board'], { queryParams: { tv: 1 } });
     try {
-      await loadScript(RECEIVER_SDK);
+      // receiver.html includes the SDK up front so the TV answers the phone quickly
+      if (!(window as any).cast?.framework?.CastReceiverContext) await loadScript(RECEIVER_SDK);
       const context = cast.framework.CastReceiverContext.getInstance();
       context.addCustomMessageListener(NAMESPACE, (e: any) => {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
@@ -121,6 +125,7 @@ export class CastService {
       const options = new cast.framework.CastReceiverOptions();
       options.disableIdleTimeout = true; // keep the board up all night
       options.skipPlayersLoad = true;
+      options.customNamespaces = { [NAMESPACE]: cast.framework.system.MessageType.JSON };
       context.start(options);
     } catch {
       // not on a Cast device; the board still renders whatever is stored
