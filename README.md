@@ -18,4 +18,4 @@ npm start        # http://localhost:4200
 npm run build    # production build in dist/
 ```
 
-Pushing to `main` builds and deploys to GitHub Pages (`.github/workflows/deploy.yml`).
+Pushing to `main` builds the app and publishes it to the `gh-pages` branch, which GitHub Pages serves (`.github/workflows/deploy.yml`).
