@@ -1,0 +1,88 @@
+@if (q(); as quiz) {
+  <header class="bar">
+    <a class="icon-btn back" routerLink="/" aria-label="Home">‹</a>
+    <h1 class="display gold">{{ quiz.title }}</h1>
+    <span class="spacer"></span>
+    <button class="btn ghost small tv" [class.live]="cast.state() === 'connected'" (click)="showTv.set(true)">
+      {{ cast.state() === 'connected' ? 'On TV' : 'TV' }}
+    </button>
+    <a class="btn small" routerLink="/board">Board</a>
+  </header>
+
+  <nav class="chips" aria-label="Rounds">
+    @for (r of quiz.rounds; track $index; let i = $index) {
+      <button
+        class="chip"
+        [class.active]="i === roundIndex()"
+        [class.done]="quiz.revealed[i]"
+        (click)="quizService.setCurrentRound(i)"
+      >
+        {{ i + 1 }}
+        @if (quiz.revealed[i]) {
+          <span aria-label="on scoreboard">★</span>
+        } @else if (roundDone(i)) {
+          <span aria-label="all scores in">✓</span>
+        }
+      </button>
+    }
+  </nav>
+
+  <main class="page">
+    <section class="card">
+      <div class="round-head">
+        <h2>{{ round()?.name }}</h2>
+        <span class="hint">out of {{ round()?.questions }}</span>
+      </div>
+
+      @if (rows().length === 0) {
+        <p class="hint">No teams yet. <a routerLink="/setup">Add teams</a></p>
+      }
+
+      <ul class="teams">
+        @for (r of rows(); track r.team.id) {
+          <li>
+            <span class="name">{{ r.team.name }}</span>
+            <button class="icon-btn" (click)="step(r.team.id, r.score, -1)" [disabled]="!r.score" [attr.aria-label]="'Minus one for ' + r.team.name">−</button>
+            <input
+              type="text"
+              inputmode="decimal"
+              class="score"
+              [class.empty]="r.score == null"
+              [value]="r.score ?? ''"
+              placeholder="–"
+              (focus)="selectAll($event)"
+              (change)="typed(r.team.id, $event)"
+              [attr.aria-label]="'Score for ' + r.team.name"
+            />
+            <button class="icon-btn" (click)="step(r.team.id, r.score, 1)" [disabled]="(r.score ?? 0) >= (round()?.questions ?? 0)" [attr.aria-label]="'Plus one for ' + r.team.name">+</button>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <div class="actions">
+      @if (revealed()) {
+        <p class="status">★ This round is on the scoreboard. Changes show up straight away.</p>
+        <div class="row">
+          <button class="btn dark" (click)="hide()">Hide from board</button>
+          @if (!isLast()) {
+            <button class="btn sunset grow" (click)="quizService.setCurrentRound(roundIndex() + 1)">Next round ›</button>
+          } @else {
+            <a class="btn sunset grow" routerLink="/board">Final scoreboard</a>
+          }
+        </div>
+      } @else {
+        @if (missing() > 0 && rows().length > 0) {
+          <p class="status">{{ missing() }} {{ missing() === 1 ? 'team has' : 'teams have' }} no score yet (counts as 0).</p>
+        }
+        <button class="btn sunset block" (click)="reveal()" [disabled]="rows().length === 0">
+          Show {{ round()?.name }} on the scoreboard
+        </button>
+      }
+    </div>
+  </main>
+
+  @if (showTv()) {
+    <app-tv-dialog (closed)="showTv.set(false)" />
+  }
+}

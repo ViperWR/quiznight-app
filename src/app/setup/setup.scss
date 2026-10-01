@@ -1,0 +1,89 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: calc(12px + env(safe-area-inset-top)) 16px 4px;
+}
+.back {
+  text-decoration: none;
+}
+h1 {
+  font-size: 1.8rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  min-height: 2.2em;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.stepper input {
+  margin: 0;
+  text-align: center;
+  padding: 10px 4px;
+  min-width: 0;
+  -moz-appearance: textfield;
+}
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.rounds,
+.teams {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.rounds li,
+.teams li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rounds input,
+.teams input,
+.add input {
+  margin: 0;
+}
+.num {
+  font-family: var(--font-display);
+  width: 1.6em;
+  text-align: right;
+  color: var(--gold-lo);
+}
+.q {
+  width: 4.2em;
+  flex: none;
+  text-align: center;
+}
+.qlabel {
+  font-size: 0.8rem;
+  color: #6f6050;
+}
+.add {
+  margin-bottom: 12px;
+}
+.save {
+  position: sticky;
+  bottom: 0;
+  padding: 16px 0 calc(8px + env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, var(--ink) 35%);
+  margin-top: 8px;
+}
