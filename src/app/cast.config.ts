@@ -3,4 +3,4 @@
  * Developer Console (https://cast.google.com/publish). Its receiver URL is
  * https://viperwr.github.io/quiznight-app/receiver.html. Empty = casting off.
  */
-export const CAST_APP_ID = '';
+export const CAST_APP_ID = '766C1D9F';
