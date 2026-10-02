@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1790882057446,
+  "timestamp": 1790929903208,
   "index": "/quiznight-app/index.html",
   "assetGroups": [
     {
@@ -16,9 +16,9 @@
         "/quiznight-app/fonts/montserrat.woff2",
         "/quiznight-app/fonts/yellowtail-400.woff2",
         "/quiznight-app/index.html",
-        "/quiznight-app/main-5FQDRT7C.js",
+        "/quiznight-app/main-VEVJWLY6.js",
         "/quiznight-app/manifest.webmanifest",
-        "/quiznight-app/styles-POK3SWIG.css"
+        "/quiznight-app/styles-U5TCDTST.css"
       ],
       "patterns": []
     },
@@ -30,6 +30,12 @@
         "ignoreVary": true
       },
       "urls": [
+        "/quiznight-app/art/badge.png",
+        "/quiznight-app/art/hero-phone.jpg",
+        "/quiznight-app/art/hero-phone.webp",
+        "/quiznight-app/art/hero-tv.jpg",
+        "/quiznight-app/art/hero-tv.webp",
+        "/quiznight-app/art/trophy.png",
         "/quiznight-app/icons/apple-touch-icon.png",
         "/quiznight-app/icons/icon-128x128.png",
         "/quiznight-app/icons/icon-144x144.png",
@@ -46,24 +52,30 @@
   ],
   "dataGroups": [],
   "hashTable": {
+    "/quiznight-app/art/badge.png": "17fe4f6fe2d71ba255fef7e444d3a152eefd212d",
+    "/quiznight-app/art/hero-phone.jpg": "dadd6273cbe8ecd31c048ac17aa98c7adaa8d3cb",
+    "/quiznight-app/art/hero-phone.webp": "d3970f9c8880923a4b489f358e7a4b78d392ce06",
+    "/quiznight-app/art/hero-tv.jpg": "234f8a05d2b3b31f36c8dca254780324129738b1",
+    "/quiznight-app/art/hero-tv.webp": "bd320ff2b80376f8e781d6a082506ad27937ecaa",
+    "/quiznight-app/art/trophy.png": "ed50ac8fc6784336684eed4891adc6e12fe1ce5b",
     "/quiznight-app/fonts/abrilfatface-400.woff2": "ceed38b5f7bca67c48b52060285212c0536d5dc1",
-    "/quiznight-app/fonts/fonts.css": "a49f32b2b5043ae32ad993fc26e94f53952c80f1",
+    "/quiznight-app/fonts/fonts.css": "e5c1d634b0a933223a8532fe23acb873aefad77a",
     "/quiznight-app/fonts/montserrat.woff2": "a5ec54920b589ebe2af3bc3bb7754a476db68abf",
     "/quiznight-app/fonts/yellowtail-400.woff2": "9f39f63af40a24e01442e32857704f64ba3be606",
-    "/quiznight-app/icons/apple-touch-icon.png": "b1f57a6aea4397f93de5fb8baa4060e05be206d8",
-    "/quiznight-app/icons/icon-128x128.png": "24a1bfe220a7ea8e7184d93b6190ddda5602f516",
-    "/quiznight-app/icons/icon-144x144.png": "1bfd38ade76a56e3f1c698840b278c2aa4f7dd19",
-    "/quiznight-app/icons/icon-152x152.png": "db9ba1e0d1da40851fa257f40ca5f0690c04fea9",
-    "/quiznight-app/icons/icon-192x192.png": "c384092e2fccffc050ee4cd7e01446b7266de5ed",
-    "/quiznight-app/icons/icon-384x384.png": "3c439c1d03972f69e9b62b5ecaef6ba043ea1ef9",
-    "/quiznight-app/icons/icon-512x512.png": "77b274315501dac952b4c047745ce626fcbf0940",
-    "/quiznight-app/icons/icon-72x72.png": "be5dece673d190154ac02469a718e8de12c7d908",
-    "/quiznight-app/icons/icon-96x96.png": "70ad44bb77a3952db5cecfec69a76e1886194557",
-    "/quiznight-app/icons/icon-maskable-512x512.png": "e067efe207f5046fc77e13093466ffefc5f7b56a",
-    "/quiznight-app/index.html": "3a83583f6302f771c94302598e674cb5d03e459b",
-    "/quiznight-app/main-5FQDRT7C.js": "2d59a4336d00cd7e84c7a40f17220df0203917ed",
-    "/quiznight-app/manifest.webmanifest": "46aa7ab47a5e3e8cae4b84f6cff8b91923b157a4",
-    "/quiznight-app/styles-POK3SWIG.css": "2f6967fdb37dbad3c3ffb2425997c913c67ff248"
+    "/quiznight-app/icons/apple-touch-icon.png": "53aca6dd01700951cdabb1caac64e296f9839570",
+    "/quiznight-app/icons/icon-128x128.png": "a14494563382f017068e48832d544ae7cb185c84",
+    "/quiznight-app/icons/icon-144x144.png": "719cc46a881475ad992198327be3afd8b5ecaf8d",
+    "/quiznight-app/icons/icon-152x152.png": "4ed9a664c8a124f5028c520d2242ade6ccfb567e",
+    "/quiznight-app/icons/icon-192x192.png": "4a174087e72496d870efbf1c8056dcfe68dec68c",
+    "/quiznight-app/icons/icon-384x384.png": "17fe4f6fe2d71ba255fef7e444d3a152eefd212d",
+    "/quiznight-app/icons/icon-512x512.png": "2c3ae854b688e0b053f15bb7b71255f60a82b118",
+    "/quiznight-app/icons/icon-72x72.png": "d75324558726315ddd56fa6a4b22dc7b7163a663",
+    "/quiznight-app/icons/icon-96x96.png": "a225b47310ba2078153709f928b0f5cd06dcd920",
+    "/quiznight-app/icons/icon-maskable-512x512.png": "fe0d81966aab665364b12f66fcf92010ba51fc82",
+    "/quiznight-app/index.html": "ac1724a5cf65b058fe9f635b023903977bc4b5ca",
+    "/quiznight-app/main-VEVJWLY6.js": "9d59a6b849aca3230d74019f15f99a53f1cee088",
+    "/quiznight-app/manifest.webmanifest": "9ca7ab99077b57232ff51090728f54cf63f3b8d6",
+    "/quiznight-app/styles-U5TCDTST.css": "2eaf8c576669128b3915dea3871c18eec00c952d"
   },
   "navigationUrls": [
     {
