@@ -1,0 +1,70 @@
+<div class="board" (click)="onClick()">
+  <app-backdrop class="sky" />
+  <div class="shade"></div>
+
+  @if (q(); as quiz) {
+    <header [style.--n]="standings().length">
+      <div class="titles">
+        <img class="badge" src="art/badge.png" alt="Quiz Night" />
+        <h1 class="display gold">{{ quiz.title }}</h1>
+      </div>
+      <p class="script subtitle">
+        @if (final()) {
+          <img class="trophy" src="art/trophy.png" alt="" />
+        }
+        {{ subtitle() }}
+      </p>
+    </header>
+
+    <section
+      class="table"
+      [class.ranked]="latest() >= 0"
+      [style.--n]="standings().length"
+      [style.--rounds]="quiz.rounds.length"
+    >
+      <div class="head line">
+        <span class="rank">#</span>
+        <span class="team">Team</span>
+        @for (r of quiz.rounds; track $index; let i = $index) {
+          <span class="rnd" [class.latest]="i === latest()">R{{ i + 1 }}</span>
+        }
+        <span class="total">Total</span>
+      </div>
+
+      <div class="rows">
+        @for (s of standings(); track s.team.id; let i = $index) {
+          <div class="line row" [class.first]="s.rank === 1 && s.total > 0" [style.--i]="i">
+            <span class="rank">{{ s.rank }}</span>
+            <span class="team">{{ s.team.name }}</span>
+            @for (v of s.roundScores; track $index; let j = $index) {
+              <span class="rnd" [class.latest]="j === latest()" [class.best]="v != null && v === best()[j]">{{ v ?? '' }}</span>
+            }
+            <span class="total">{{ s.total }}</span>
+          </div>
+        }
+      </div>
+    </section>
+  } @else {
+    <div class="waiting">
+      <h1><app-wordmark /></h1>
+      <p>Waiting for the quiz to start…</p>
+    </div>
+  }
+
+  @if (!tvMode()) {
+    <nav class="controls" [class.hidden]="controlsHidden()" (click)="$event.stopPropagation()">
+      <a class="btn small dark" routerLink="/score">‹ Scores</a>
+      <span class="spacer"></span>
+      <button class="btn small ghost" (click)="showTv.set(true)">
+        {{ onTv() ? 'On TV' : 'TV' }}
+      </button>
+      @if (canFullscreen) {
+        <button class="btn small" (click)="toggleFullscreen()">{{ isFullscreen() ? 'Exit full screen' : 'Full screen' }}</button>
+      }
+    </nav>
+  }
+</div>
+
+@if (showTv()) {
+  <app-tv-dialog (closed)="showTv.set(false)" />
+}
