@@ -1,4 +1,5 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, DestroyRef, inject, output, signal } from '@angular/core';
+import { AirplayService } from './airplay.service';
 import { PUBLIC_URL } from './cast.config';
 import { CastService } from './cast.service';
 import { LiveService } from './live.service';
@@ -83,8 +84,36 @@ import { LiveService } from './live.service';
           </div>
         }
 
+        @if (airplay.supported) {
+          <div class="way">
+            <h3>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-1M12 15l5 6H7z" /></svg>
+              AirPlay
+            </h3>
+            @if (airplay.connected()) {
+              <p class="ok"><strong>Sending the scoreboard over AirPlay.</strong> Keep this page open and the screen on.</p>
+              <button class="btn dark block" (click)="airplay.pick()">Change or stop AirPlay</button>
+            } @else {
+              <button class="btn block" (click)="airplay.pick()">AirPlay scoreboard</button>
+            }
+            <p class="note">
+              AirPlay: needs an AirPlay-capable TV (an Apple TV, or a newer Samsung, LG or Sony) on the same Wi-Fi. New and
+              not yet tried on a real TV.
+              @if (airplay.canClip) {
+                If the TV stays black,
+                <button class="link" (click)="airplay.switchMode()">
+                  try the {{ airplay.mode() === 'live' ? 'looping video' : 'live picture' }} instead</button
+                >.
+              }
+            </p>
+            @if (airplay.error(); as err) {
+              <p class="err">{{ err }}</p>
+            }
+          </div>
+        }
+
         <p class="hint">
-          Screen mirroring (Smart View, Screen cast, AirPlay) also works, but then the TV shows everything on the phone,
+          Screen mirroring (Smart View, Screen cast, AirPlay mirroring) also works, but then the TV shows everything on the phone,
           including the scores you're typing.
         </p>
       </section>
@@ -200,6 +229,18 @@ import { LiveService } from './live.service';
       border-color: rgba(158, 26, 28, 0.3);
     }
 
+    .note { margin: 10px 0 0; font-size: 0.8rem; color: #5d4f3d; }
+    .link {
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      font-weight: 700;
+      color: var(--sunset-deep);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     .hint {
       margin: 14px 0 0;
       padding-top: 12px;
@@ -211,6 +252,7 @@ import { LiveService } from './live.service';
 export class TvDialog {
   protected cast = inject(CastService);
   protected live = inject(LiveService);
+  protected airplay = inject(AirplayService);
   readonly closed = output<void>();
 
   protected code = signal('');
@@ -221,6 +263,12 @@ export class TvDialog {
     (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)
       ? PUBLIC_URL
       : location.host + location.pathname.replace(/[^/]*$/, '')) + 'tv';
+
+  constructor() {
+    // The video has to exist before the tap, or Safari won't open the AirPlay list
+    this.airplay.prepare();
+    inject(DestroyRef).onDestroy(() => this.airplay.release());
+  }
 
   /** Scoreboard-only window; it follows this one through the saved quiz. */
   openWindow() {
