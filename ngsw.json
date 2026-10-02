@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1790929903208,
+  "timestamp": 1790932331153,
   "index": "/quiznight-app/index.html",
   "assetGroups": [
     {
@@ -16,7 +16,7 @@
         "/quiznight-app/fonts/montserrat.woff2",
         "/quiznight-app/fonts/yellowtail-400.woff2",
         "/quiznight-app/index.html",
-        "/quiznight-app/main-VEVJWLY6.js",
+        "/quiznight-app/main-NGKQ4L3O.js",
         "/quiznight-app/manifest.webmanifest",
         "/quiznight-app/styles-U5TCDTST.css"
       ],
@@ -72,8 +72,8 @@
     "/quiznight-app/icons/icon-72x72.png": "d75324558726315ddd56fa6a4b22dc7b7163a663",
     "/quiznight-app/icons/icon-96x96.png": "a225b47310ba2078153709f928b0f5cd06dcd920",
     "/quiznight-app/icons/icon-maskable-512x512.png": "fe0d81966aab665364b12f66fcf92010ba51fc82",
-    "/quiznight-app/index.html": "ac1724a5cf65b058fe9f635b023903977bc4b5ca",
-    "/quiznight-app/main-VEVJWLY6.js": "9d59a6b849aca3230d74019f15f99a53f1cee088",
+    "/quiznight-app/index.html": "9c3019335d74b6c6f9055f9ceb231d1cca8f8171",
+    "/quiznight-app/main-NGKQ4L3O.js": "dcac6d07d4869da50b83493857b3643651d6b18d",
     "/quiznight-app/manifest.webmanifest": "9ca7ab99077b57232ff51090728f54cf63f3b8d6",
     "/quiznight-app/styles-U5TCDTST.css": "2eaf8c576669128b3915dea3871c18eec00c952d"
   },
