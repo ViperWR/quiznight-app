@@ -62,7 +62,8 @@ header {
 
 .badge {
   flex: none;
-  width: clamp(3rem, 11vmin, 8rem);
+  /* Gives height back to the table as the team list grows */
+  width: clamp(3rem, calc(12vmin - var(--n, 8) * 0.25vmin), 8rem);
   height: auto;
   aspect-ratio: 1;
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
@@ -95,23 +96,29 @@ h1 {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  /* How many times taller the top three bars are; 1 until a round is on the board */
+  --podium: 1;
+  --min-units: 6.5;
+  --round-w: min(5.5vw, calc(38vw / var(--rounds)));
+  /* Largest the row text may get: keeps room for about 17 letters of team name */
+  --cap: min(4.4vw, calc((72vw - var(--rounds) * (var(--round-w) + 1vw)) / 12));
+}
+
+.table.ranked {
+  --podium: 1.55;
 }
 
 .line {
   display: grid;
   /* Column widths in vw so the header and the (much larger) row text line up */
-  grid-template-columns: 6vw minmax(0, 1fr) repeat(
-      var(--rounds),
-      min(5vw, calc(36vw / var(--rounds)))
-    )
-    9vw;
+  grid-template-columns: 6vw minmax(0, 1fr) repeat(var(--rounds), var(--round-w)) 11vw;
   align-items: center;
   gap: 1vw;
   padding: 0 1.5vw;
 }
 
 .head {
-  font-size: clamp(0.7rem, 2vmin, 1.4rem);
+  font-size: clamp(0.8rem, 2.4vmin, 1.7rem);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -127,22 +134,33 @@ h1 {
   container-type: size;
 }
 
+/* The table height is shared out in units: an ordinary row takes one, a top-three row
+   takes --podium of them. Rows are placed by --i so they can slide when the order changes. */
 .row {
-  --slots: max(var(--n), 6);
+  --extra: calc(var(--podium) - 1);
+  /* --min-units stops a short list from stretching into a few enormous bars */
+  --units: max(var(--n) + min(var(--n), 3) * var(--extra), var(--min-units));
+  --unit: calc(100cqh / var(--units));
+  /* 1 for the top three places, 0 below */
+  --top: clamp(0, 3 - var(--i), 1);
+  --h: calc(var(--unit) * (1 + var(--top) * var(--extra)));
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  height: calc(100% / var(--slots));
-  transform: translateY(calc(var(--i) * 100%));
-  transition: transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  font-size: min(calc(100cqh / var(--slots) * 0.42), 5vw);
+  height: var(--h);
+  transform: translateY(calc(var(--unit) * (var(--i) + min(var(--i), 3) * var(--extra))));
+  transition: transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1), height 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    font-size 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Text fills the bar; with only a few teams the width cap takes over */
+  font-size: min(calc(var(--h) * 0.68), calc(var(--cap) * (1 + var(--top) * var(--extra) * 0.2)));
+  line-height: 1.15;
 }
 
 .row::before {
   content: '';
   position: absolute;
-  inset: 5% 0;
+  inset: 4% 0;
   border-radius: 0.5em;
   background: linear-gradient(
     180deg,
@@ -174,6 +192,13 @@ h1 {
   border-color: #fff0a0;
   box-shadow: 0 0 2.5em rgba(255, 215, 106, 0.45), 0 4px 16px rgba(232, 184, 74, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Second and third place: same dark bar, picked out with a brighter gold edge */
+.ranked .row:nth-child(-n + 3):not(.first)::before {
+  border-color: rgba(255, 224, 138, 0.85);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4), 0 0 1.2em rgba(232, 184, 74, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .row.first {
@@ -220,9 +245,9 @@ h1 {
 
 .rnd {
   text-align: center;
-  font-size: 0.7em;
+  font-size: 0.8em;
   font-weight: 600;
-  opacity: 0.7;
+  opacity: 0.8;
   transition: opacity 300ms, color 300ms;
 }
 
@@ -264,6 +289,10 @@ h1 {
 
 /* Phones held upright: drop the per-round columns so names and totals fit. */
 @media (orientation: portrait) and (max-width: 700px) {
+  .table {
+    --cap: 5vw;
+    --min-units: 11;
+  }
   .line,
   .head {
     grid-template-columns: 10vw minmax(0, 1fr) 16vw;
