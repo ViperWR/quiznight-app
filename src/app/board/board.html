@@ -37,7 +37,7 @@
             <span class="rank">{{ s.rank }}</span>
             <span class="team">{{ s.team.name }}</span>
             @for (v of s.roundScores; track $index; let j = $index) {
-              <span class="rnd" [class.latest]="j === latest()">{{ v ?? '' }}</span>
+              <span class="rnd" [class.latest]="j === latest()" [class.best]="v != null && v === best()[j]">{{ v ?? '' }}</span>
             }
             <span class="total">{{ s.total }}</span>
           </div>

@@ -49,6 +49,15 @@ export class Board {
   /** Index of the most recently revealed round, highlighted in the table */
   protected latest = computed(() => this.q()?.revealed.lastIndexOf(true) ?? -1);
 
+  /** Highest score in each revealed round, highlighted for every team that got it; null if nobody scored */
+  protected best = computed(() => {
+    const rows = this.standings();
+    return (this.q()?.rounds ?? []).map((_, i) => {
+      const top = Math.max(0, ...rows.map((s) => s.roundScores[i] ?? 0));
+      return top > 0 ? top : null;
+    });
+  });
+
   private wakeLock: any = null;
 
   constructor() {
