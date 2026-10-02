@@ -7,55 +7,65 @@ import { LiveService } from './live.service';
   template: `
     <div class="dialog-backdrop" (click)="closed.emit()">
       <section class="card" (click)="$event.stopPropagation()" role="dialog" aria-label="Show on TV">
-        <div class="row">
+        <div class="row top">
           <h2>Show it on the TV</h2>
           <span class="spacer"></span>
           <button class="icon-btn plain" (click)="closed.emit()" aria-label="Close">✕</button>
         </div>
-        <p>The TV shows only the scoreboard. This phone keeps the scoring screen.</p>
+        <p class="intro">The TV shows only the scoreboard. This phone keeps the scoring screen.</p>
 
-        <h3>Any smart TV</h3>
-        @if (live.phoneCode(); as code) {
-          <p class="ok"><strong>Connected to TV {{ code }}.</strong> It updates each time you show a round.</p>
-          <button class="btn dark block" (click)="live.disconnect()">Disconnect TV</button>
-        } @else {
-          <ol>
-            <li>On the TV, open the web browser and go to <strong class="url">{{ tvUrl }}</strong></li>
-            <li>Type the code the TV shows:</li>
-          </ol>
-          <form class="row" (submit)="$event.preventDefault(); live.connect(code())">
-            <input
-              id="tv-code"
-              type="text"
-              class="code"
-              maxlength="6"
-              autocapitalize="characters"
-              autocomplete="off"
-              placeholder="ABCD"
-              [value]="code()"
-              (input)="code.set(str($event))"
-              aria-label="TV code"
-            />
-            <button class="btn sunset" type="submit" [disabled]="code().trim().length < 4">Connect</button>
-          </form>
-        }
-        @if (live.phoneError(); as err) {
-          <p class="err">{{ err }}</p>
-        }
-
-        @if (cast.supported()) {
-          <h3>Chromecast or Google TV</h3>
-          @if (cast.state() === 'connected') {
-            <p class="ok"><strong>Casting the scoreboard.</strong></p>
-            <button class="btn dark block" (click)="cast.stop()">Stop casting</button>
+        <div class="way">
+          <h3>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2" /><path d="M8 21h8M12 17v4" /></svg>
+            Any smart TV
+          </h3>
+          @if (live.phoneCode(); as code) {
+            <p class="ok"><strong>Connected to TV {{ code }}.</strong> It updates each time you show a round.</p>
+            <button class="btn dark block" (click)="live.disconnect()">Disconnect TV</button>
           } @else {
-            <button class="btn block" (click)="cast.start()" [disabled]="cast.state() === 'connecting'">
-              {{ cast.state() === 'connecting' ? 'Connecting…' : 'Cast scoreboard' }}
-            </button>
+            <ol class="steps">
+              <li><span>On the TV, open the web browser and go to <strong class="url">{{ tvUrl }}</strong></span></li>
+              <li><span>Type the code the TV shows:</span></li>
+            </ol>
+            <form class="row" (submit)="$event.preventDefault(); live.connect(code())">
+              <input
+                id="tv-code"
+                type="text"
+                class="code"
+                maxlength="6"
+                autocapitalize="characters"
+                autocomplete="off"
+                placeholder="ABCD"
+                [value]="code()"
+                (input)="code.set(str($event))"
+                aria-label="TV code"
+              />
+              <button class="btn sunset" type="submit" [disabled]="code().trim().length < 4">Connect</button>
+            </form>
           }
-          @if (cast.error(); as err) {
+          @if (live.phoneError(); as err) {
             <p class="err">{{ err }}</p>
           }
+        </div>
+
+        @if (cast.supported()) {
+          <div class="way">
+            <h3>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6M3 13a6 6 0 0 1 6 6M3 17a2 2 0 0 1 2 2" /></svg>
+              Chromecast or Google TV
+            </h3>
+            @if (cast.state() === 'connected') {
+              <p class="ok"><strong>Casting the scoreboard.</strong></p>
+              <button class="btn dark block" (click)="cast.stop()">Stop casting</button>
+            } @else {
+              <button class="btn block" (click)="cast.start()" [disabled]="cast.state() === 'connecting'">
+                {{ cast.state() === 'connecting' ? 'Connecting…' : 'Cast scoreboard' }}
+              </button>
+            }
+            @if (cast.error(); as err) {
+              <p class="err">{{ err }}</p>
+            }
+          </div>
         }
 
         <p class="hint">
@@ -66,13 +76,120 @@ import { LiveService } from './live.service';
     </div>
   `,
   styles: `
-    h3 { font-family: var(--font-display); font-size: 1.1rem; margin: 18px 0 6px; }
+    .top h2 { margin: 0; font-size: 1.45rem; line-height: 1.15; }
+    .top .icon-btn { margin: -6px -8px -6px 0; }
     p { margin: 8px 0; line-height: 1.45; }
-    ol { margin: 6px 0 10px; }
-    .url { overflow-wrap: anywhere; }
-    .code { margin: 0; font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
-    .ok { color: #2f6b2f; }
-    .err { color: var(--sunset-deep); font-weight: 600; }
+    .intro { margin: 6px 0 0; color: #5d4f3d; }
+
+    .way {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(169, 120, 24, 0.24);
+      box-shadow: 0 1px 2px rgba(15, 11, 9, 0.05);
+    }
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      margin: 0 0 10px;
+    }
+    h3 svg {
+      flex: none;
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--gold-lo);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 0 0 12px;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .steps li::before {
+      content: counter(step);
+      flex: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: linear-gradient(180deg, var(--gold-hi), var(--gold));
+      box-shadow: 0 1px 0 var(--gold-lo);
+    }
+    .steps span { padding-top: 1px; min-width: 0; }
+    .url { overflow-wrap: anywhere; color: var(--sunset-deep); }
+
+    .code {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      padding: 8px 6px 8px 0.3em;
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      text-align: center;
+      background: #fff;
+    }
+    .code::placeholder { color: rgba(42, 32, 24, 0.22); }
+    form .btn { min-height: 56px; }
+
+    .ok,
+    .err {
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid;
+    }
+    .ok {
+      margin: 0 0 12px;
+      color: #23561f;
+      background: rgba(47, 107, 47, 0.1);
+      border-color: rgba(47, 107, 47, 0.3);
+    }
+    .ok::before {
+      content: '';
+      display: inline-block;
+      width: 0.6em;
+      height: 0.6em;
+      margin-right: 0.55em;
+      border-radius: 50%;
+      background: #2f8a2f;
+      box-shadow: 0 0 0 3px rgba(47, 138, 47, 0.2);
+    }
+    .err {
+      margin: 12px 0 0;
+      color: var(--sunset-deep);
+      font-weight: 600;
+      background: rgba(158, 26, 28, 0.08);
+      border-color: rgba(158, 26, 28, 0.3);
+    }
+
+    .hint {
+      margin: 14px 0 0;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(169, 120, 24, 0.35);
+      font-size: 0.8rem;
+    }
   `,
 })
 export class TvDialog {
