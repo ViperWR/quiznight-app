@@ -6,21 +6,11 @@ A phone app for running a pub quiz night, styled after the Watergat Pub & Grill 
 - After every round, enter each team's score and tap **Show on the scoreboard**.
 - Put the scoreboard on the TV: **Cast** (Chrome with a Chromecast or Cast TV), screen mirroring
   (Android Cast / Smart View, iPhone Screen Mirroring), or a second window on a laptop plugged into the TV.
+- On iPhone or iPad Safari the **TV** button also offers **AirPlay**, which sends only the scoreboard to an AirPlay TV
+  as a video. It is experimental and has not been tried on a real AirPlay TV yet.
 
 It is an installable web app (PWA): open it in Chrome on Android or Safari on iPhone and use
 **Add to Home screen**. It works offline, and everything is saved on the phone; there's no account or server.
-
-## Run it on a laptop
-
-Double-click **Quiz Night.bat** (Windows, needs [Node.js](https://nodejs.org)). It builds the app the first time
-or after a change, serves it at `http://localhost:4321` on this laptop only, and opens it in its own Chrome window
-(Edge if Chrome is missing). Keep the black window open while you use it. `npm run laptop` does the same from a terminal.
-
-From the laptop the scoreboard goes to a TV three ways, all under the **TV** button:
-
-- **TV plugged into this laptop** (HDMI or wireless display): opens a scoreboard-only window to drag onto the TV.
-- **Any smart TV**: the TV's browser opens `viperwr.github.io/quiznight-app/tv` and the laptop types its code. Both need internet.
-- **Chromecast or Google TV**: Chrome only. The laptop and the Chromecast must be on the same Wi-Fi.
 
 ## Artwork
 
