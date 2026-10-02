@@ -4,3 +4,9 @@
  * https://viperwr.github.io/quiznight-app/receiver.html. Empty = casting off.
  */
 export const CAST_APP_ID = '766C1D9F';
+
+/**
+ * Where the app is published. A TV can't open an address on the host's own laptop
+ * (localhost), so a copy running there sends the TV to the published one instead.
+ */
+export const PUBLIC_URL = 'viperwr.github.io/quiznight-app/';

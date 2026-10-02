@@ -3,12 +3,12 @@ import { RouterLink } from '@angular/router';
 import { CastService } from '../cast.service';
 import { LiveService } from '../live.service';
 import { QuizService } from '../quiz.service';
-import { Sunset } from '../sunset';
+import { Backdrop, Wordmark } from '../art';
 import { TvDialog } from '../tv-dialog';
 
 @Component({
   selector: 'app-board',
-  imports: [RouterLink, Sunset, TvDialog],
+  imports: [RouterLink, Backdrop, Wordmark, TvDialog],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -38,6 +38,12 @@ export class Board {
     if (shown === q.rounds.length) return 'Final scores';
     const last = q.revealed.lastIndexOf(true);
     return `After ${q.rounds[last].name} · ${shown} of ${q.rounds.length}`;
+  });
+
+  /** Every round is on the board: time for the trophy */
+  protected final = computed(() => {
+    const q = this.q();
+    return !!q && q.rounds.length > 0 && q.revealed.every(Boolean);
   });
 
   /** Index of the most recently revealed round, highlighted in the table */
@@ -80,7 +86,9 @@ export class Board {
     }
   }
 
-  toggleControls() {
-    this.controlsHidden.update((h) => !h);
+  /** Host view: show or hide the buttons. TV view: there are none, so a click fills the screen. */
+  onClick() {
+    if (this.tvMode()) this.toggleFullscreen();
+    else this.controlsHidden.update((h) => !h);
   }
 }

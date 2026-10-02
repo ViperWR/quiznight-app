@@ -1,14 +1,19 @@
-<div class="board" (click)="toggleControls()">
-  <app-sunset class="sky" />
+<div class="board" (click)="onClick()">
+  <app-backdrop class="sky" />
   <div class="shade"></div>
 
   @if (q(); as quiz) {
     <header>
       <div class="titles">
-        <span class="script badge">Quiz Night</span>
+        <img class="badge" src="art/badge.png" alt="Quiz Night" />
         <h1 class="display gold">{{ quiz.title }}</h1>
       </div>
-      <p class="script subtitle">{{ subtitle() }}</p>
+      <p class="script subtitle">
+        @if (final()) {
+          <img class="trophy" src="art/trophy.png" alt="" />
+        }
+        {{ subtitle() }}
+      </p>
     </header>
 
     <section
@@ -40,7 +45,7 @@
     </section>
   } @else {
     <div class="waiting">
-      <h1 class="script">Quiz Night</h1>
+      <h1><app-wordmark /></h1>
       <p>Waiting for the quiz to start…</p>
     </div>
   }

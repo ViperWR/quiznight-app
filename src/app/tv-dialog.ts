@@ -1,4 +1,5 @@
 import { Component, inject, output, signal } from '@angular/core';
+import { PUBLIC_URL } from './cast.config';
 import { CastService } from './cast.service';
 import { LiveService } from './live.service';
 
@@ -12,7 +13,21 @@ import { LiveService } from './live.service';
           <span class="spacer"></span>
           <button class="icon-btn plain" (click)="closed.emit()" aria-label="Close">✕</button>
         </div>
-        <p class="intro">The TV shows only the scoreboard. This phone keeps the scoring screen.</p>
+        <p class="intro">The TV shows only the scoreboard. This {{ desktop ? 'screen' : 'phone' }} keeps the scoring screen.</p>
+
+        @if (desktop) {
+          <div class="way">
+            <h3>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="13" height="9" rx="1.5" /><rect x="9" y="11" width="13" height="9" rx="1.5" /></svg>
+              TV plugged into this laptop
+            </h3>
+            <p class="how">
+              With the TV on an HDMI cable or wireless display, open the scoreboard in its own window, drag it onto the TV
+              and click it to fill the screen.
+            </p>
+            <button class="btn block" (click)="openWindow()">Open scoreboard window</button>
+          </div>
+        }
 
         <div class="way">
           <h3>
@@ -137,6 +152,7 @@ import { LiveService } from './live.service';
       box-shadow: 0 1px 0 var(--gold-lo);
     }
     .steps span { padding-top: 1px; min-width: 0; }
+    .how { margin: 0 0 12px; }
     .url { overflow-wrap: anywhere; color: var(--sunset-deep); }
 
     .code {
@@ -198,8 +214,22 @@ export class TvDialog {
   readonly closed = output<void>();
 
   protected code = signal('');
+  /** A laptop or desktop: it can put a second window on a TV that's plugged in */
+  protected desktop = matchMedia('(hover: hover) and (pointer: fine)').matches;
   /** Short address for the TV, e.g. viperwr.github.io/quiznight-app/tv */
-  protected tvUrl = location.host + location.pathname.replace(/[^/]*$/, '') + 'tv';
+  protected tvUrl =
+    (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)
+      ? PUBLIC_URL
+      : location.host + location.pathname.replace(/[^/]*$/, '')) + 'tv';
+
+  /** Scoreboard-only window; it follows this one through the saved quiz. */
+  openWindow() {
+    window.open(
+      location.href.replace(/#.*$/, '') + '#/board?tv=1',
+      'quiznight-board',
+      'popup,width=1280,height=720',
+    );
+  }
 
   str(e: Event): string {
     return (e.target as HTMLInputElement).value;

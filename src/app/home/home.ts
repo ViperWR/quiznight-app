@@ -1,23 +1,24 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { QuizService } from '../quiz.service';
-import { Sunset } from '../sunset';
+import { Acacia, Backdrop, Wordmark } from '../art';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, Sunset],
+  imports: [RouterLink, Acacia, Backdrop, Wordmark],
   template: `
+    <app-backdrop class="sky" />
+    <div class="shade"></div>
+
     <header class="hero">
-      <app-sunset class="sky" />
-      <div class="brand">
-        <h1 class="script">Quiz Night</h1>
-        <p class="tagline"><span>Good Food</span> <span>Great Company</span> <span>Great Prizes</span></p>
-      </div>
+      <h1><app-wordmark /></h1>
+      <p class="tagline"><span>Good Food</span> <span>Great Company</span> <span>Great Prizes</span></p>
     </header>
 
     <main class="page">
       @if (quiz.quiz(); as q) {
         <section class="card now">
+          <app-acacia class="mark" />
           <h2>{{ q.title }}</h2>
           <dl class="stats">
             <div>
@@ -54,6 +55,7 @@ import { Sunset } from '../sunset';
         </section>
       } @else {
         <section class="card now">
+          <app-acacia class="mark" />
           <h2>Ready when you are</h2>
           <ol class="steps">
             <li>Set the rounds and questions</li>
@@ -72,39 +74,49 @@ import { Sunset } from '../sunset';
     </main>
   `,
   styles: `
-    .hero {
-      position: relative;
-      height: 46vh;
-      min-height: 260px;
-      max-height: 420px;
+    :host {
+      display: block;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    /* The artwork stays put behind the page; the cards scroll over it */
+    .sky,
+    .shade {
+      position: fixed;
+      inset: 0;
     }
     .sky {
-      position: absolute;
-      inset: 0;
+      --focus: 50% 40%;
     }
-    .brand {
-      position: absolute;
-      inset: 0;
+    .shade {
+      background: linear-gradient(
+        180deg,
+        rgba(10, 7, 5, 0.72) 0%,
+        rgba(10, 7, 5, 0.3) 26%,
+        rgba(10, 7, 5, 0) 46%,
+        rgba(10, 7, 5, 0.25) 100%
+      );
+    }
+    .hero,
+    .page {
+      position: relative;
+    }
+    .hero {
+      height: 38vh;
+      min-height: 220px;
+      max-height: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: calc(4% + env(safe-area-inset-top)) 12px 0;
+      padding: calc(5vh + env(safe-area-inset-top)) 16px 0;
       text-align: center;
     }
     h1 {
-      font-size: clamp(3.6rem, 16vw, 6rem);
-      line-height: 1.15;
-      transform: rotate(-6deg);
-      color: var(--gold-hi);
-      text-shadow:
-        0 2px 0 rgba(90, 20, 10, 0.7),
-        0 8px 24px rgba(0, 0, 0, 0.5),
-        0 0 44px rgba(255, 224, 138, 0.3);
+      font-size: clamp(1.9rem, 10.4vw, 3.6rem);
       animation: slideUp 600ms var(--ease-out) both;
     }
     .tagline {
-      margin: 6px 0 0;
+      margin: 16px 0 0;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -114,7 +126,7 @@ import { Sunset } from '../sunset';
       text-transform: uppercase;
       letter-spacing: 0.2em;
       color: var(--cream);
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
       animation: fadeIn 900ms var(--ease-out) 150ms both;
     }
     .tagline span + span::before {
@@ -125,22 +137,54 @@ import { Sunset } from '../sunset';
       color: var(--gold-hi);
     }
 
-    /* Wide screens show the whole panorama, so the title moves to the open sky left of the tree */
-    @media (min-aspect-ratio: 4/3) {
-      .brand {
-        right: 62%;
+    .page {
+      padding-top: 0;
+    }
+
+    /* Wide screens: title and cards sit in the darker left of the picture, the tree stands clear on the right */
+    @media (min-aspect-ratio: 4/3) and (min-width: 900px) {
+      .sky {
+        --focus: 100% 50%;
+      }
+      .shade {
+        background: linear-gradient(90deg, rgba(10, 7, 5, 0.6) 0%, rgba(10, 7, 5, 0.25) 45%, rgba(10, 7, 5, 0) 70%);
+      }
+      .hero,
+      .page {
+        width: min(520px, 42vw);
+        max-width: none;
+        margin: 0 0 0 max(5vw, env(safe-area-inset-left));
+      }
+      .hero {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        align-items: flex-start;
+        padding: 7vh 0 4vh;
+        text-align: left;
       }
       h1 {
-        font-size: clamp(3rem, 7.5vw, 6rem);
+        font-size: clamp(2.4rem, 4.4vw, 3.8rem);
       }
       .tagline {
-        font-size: clamp(0.55rem, 1vw, 0.78rem);
-        letter-spacing: 0.14em;
+        justify-content: flex-start;
+      }
+      .page {
+        padding-left: 0;
+        padding-right: 0;
       }
     }
 
-    .page {
-      margin-top: -28px;
+    .mark {
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      width: 92px;
+      color: var(--gold-lo);
+      opacity: 0.16;
+      pointer-events: none;
+    }
+    .card > :not(.mark) {
       position: relative;
     }
     .card {
