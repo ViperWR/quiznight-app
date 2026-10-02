@@ -5,8 +5,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: max(2vh, env(safe-area-inset-top)) max(3vw, env(safe-area-inset-right)) 3vh max(3vw, env(safe-area-inset-left));
+  padding: max(2vh, env(safe-area-inset-top)) max(3vw, env(safe-area-inset-right)) 3vh
+    max(3vw, env(safe-area-inset-left));
   background: var(--ink);
+  background-image:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(232, 184, 74, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 40% at 80% 100%, rgba(232, 67, 26, 0.1) 0%, transparent 50%);
 }
 
 .sky {
@@ -15,12 +19,19 @@
   right: 0;
   bottom: 0;
   height: 55%;
+  pointer-events: none;
 }
 
 .shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, var(--ink) 40%, rgba(15, 11, 9, 0.55) 75%, rgba(15, 11, 9, 0.25));
+  background: linear-gradient(
+    180deg,
+    var(--ink) 35%,
+    rgba(10, 7, 5, 0.7) 65%,
+    rgba(10, 7, 5, 0.2) 100%
+  );
+  pointer-events: none;
 }
 
 header,
@@ -35,9 +46,18 @@ header {
   justify-content: space-between;
   gap: 2vw;
   flex-wrap: wrap;
-  padding-bottom: 1.5vh;
-  border-bottom: 2px solid var(--gold);
-  margin-bottom: 1.5vh;
+  padding-bottom: 1.6vh;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--gold-lo) 8%,
+      var(--gold) 50%,
+      var(--gold-lo) 92%,
+      transparent 100%
+    )
+    1;
+  margin-bottom: 1.8vh;
 }
 
 .titles {
@@ -49,6 +69,7 @@ header {
   font-size: clamp(1.1rem, 3.2vmin, 2.4rem);
   transform: rotate(-4deg);
   transform-origin: left;
+  filter: drop-shadow(0 2px 8px rgba(232, 184, 74, 0.35));
 }
 
 h1 {
@@ -60,6 +81,7 @@ h1 {
 .subtitle {
   margin: 0;
   font-size: clamp(1.1rem, 4.2vmin, 3rem);
+  opacity: 0.95;
 }
 
 .table {
@@ -71,8 +93,12 @@ h1 {
 
 .line {
   display: grid;
-  // Column widths in vw so the header and the (much larger) row text line up
-  grid-template-columns: 6vw minmax(0, 1fr) repeat(var(--rounds), min(5vw, calc(36vw / var(--rounds)))) 9vw;
+  /* Column widths in vw so the header and the (much larger) row text line up */
+  grid-template-columns: 6vw minmax(0, 1fr) repeat(
+      var(--rounds),
+      min(5vw, calc(36vw / var(--rounds)))
+    )
+    9vw;
   align-items: center;
   gap: 1vw;
   padding: 0 1.5vw;
@@ -82,9 +108,10 @@ h1 {
   font-size: clamp(0.7rem, 2vmin, 1.4rem);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   color: var(--muted);
-  padding-bottom: 0.6vh;
+  padding-bottom: 0.8vh;
+  opacity: 0.85;
 }
 
 .rows {
@@ -109,31 +136,72 @@ h1 {
 .row::before {
   content: '';
   position: absolute;
-  inset: 6% 0;
-  border-radius: 0.4em;
-  background: rgba(28, 21, 17, 0.88);
-  border: 1px solid rgba(228, 178, 58, 0.35);
+  inset: 5% 0;
+  border-radius: 0.5em;
+  background: linear-gradient(
+    180deg,
+    rgba(36, 28, 20, 0.92) 0%,
+    rgba(22, 16, 12, 0.9) 100%
+  );
+  border: 1px solid rgba(228, 178, 58, 0.28);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   z-index: -1;
+  transition: background 400ms var(--ease-out), border-color 400ms, box-shadow 400ms;
+}
+
+.row:nth-child(even)::before {
+  background: linear-gradient(
+    180deg,
+    rgba(42, 32, 24, 0.88) 0%,
+    rgba(26, 20, 15, 0.86) 100%
+  );
 }
 
 .row.first::before {
-  background: linear-gradient(180deg, var(--gold-hi), var(--gold));
-  border-color: var(--gold-hi);
-  box-shadow: 0 0 2em rgba(255, 215, 106, 0.35);
+  background: linear-gradient(
+    135deg,
+    #fff4c2 0%,
+    var(--gold-hi) 25%,
+    var(--gold) 65%,
+    #d4a030 100%
+  );
+  border-color: #fff0a0;
+  box-shadow: 0 0 2.5em rgba(255, 215, 106, 0.45), 0 4px 16px rgba(232, 184, 74, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .row.first {
   color: var(--ink);
+  font-weight: 700;
+}
+
+/* Crown-ish accent for first place rank */
+.row.first .rank {
+  position: relative;
+}
+
+.row.first .rank::after {
+  content: '★';
+  position: absolute;
+  top: -0.55em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.45em;
+  color: var(--sunset-deep);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 4px rgba(232, 67, 26, 0.4));
 }
 
 .rank {
   font-family: var(--font-display);
   text-align: center;
   color: var(--gold-hi);
+  text-shadow: 0 0 12px rgba(232, 184, 74, 0.3);
 }
 
 .first .rank {
   color: var(--sunset-deep);
+  text-shadow: none;
 }
 
 .team {
@@ -141,32 +209,43 @@ h1 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
 .rnd {
   text-align: center;
   font-size: 0.7em;
   font-weight: 600;
-  opacity: 0.75;
+  opacity: 0.7;
+  transition: opacity 300ms, color 300ms;
 }
 
 .rnd.latest {
   opacity: 1;
   color: var(--gold-hi);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(232, 184, 74, 0.35);
 }
 
 .head .rnd.latest {
   color: var(--gold-hi);
+  text-shadow: none;
 }
 
 .first .rnd.latest {
   color: var(--sunset-deep);
+  text-shadow: none;
 }
 
 .total {
   font-family: var(--font-display);
   text-align: right;
   font-size: 1.15em;
+  letter-spacing: 0.02em;
+}
+
+.first .total {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .head .total,
@@ -174,9 +253,10 @@ h1 {
   font-family: var(--font-body);
   font-size: 1em;
   color: var(--muted);
+  text-shadow: none;
 }
 
-// Phones held upright: drop the per-round columns so names and totals fit.
+/* Phones held upright: drop the per-round columns so names and totals fit. */
 @media (orientation: portrait) and (max-width: 700px) {
   .line,
   .head {
@@ -190,16 +270,20 @@ h1 {
 .waiting {
   margin: auto;
   text-align: center;
+  animation: fadeIn 600ms var(--ease-out);
 }
 
 .waiting h1 {
   font-size: clamp(3rem, 14vmin, 9rem);
   color: var(--gold-hi);
+  filter: drop-shadow(0 4px 24px rgba(232, 184, 74, 0.35));
 }
 
 .waiting p {
   font-size: clamp(1rem, 3vmin, 2rem);
   color: var(--cream-2);
+  opacity: 0.85;
+  margin-top: 0.5em;
 }
 
 .controls {
@@ -209,10 +293,30 @@ h1 {
   bottom: calc(12px + env(safe-area-inset-bottom));
   display: flex;
   gap: 8px;
-  transition: opacity 200ms;
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+  z-index: 10;
 }
 
 .controls.hidden {
   opacity: 0;
   pointer-events: none;
+  transform: translateY(8px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
+  .row.first .rank::after {
+    display: none;
+  }
 }

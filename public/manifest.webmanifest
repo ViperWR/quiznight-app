@@ -61,7 +61,7 @@
     }
   ],
   "description": "Keep score at quiz night and put the scoreboard on the TV.",
-  "theme_color": "#0f0b09",
-  "background_color": "#0f0b09",
+  "theme_color": "#0a0705",
+  "background_color": "#0a0705",
   "orientation": "any"
 }

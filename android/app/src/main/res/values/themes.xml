@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.QuizNight" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">#E4B23A</item>
-        <item name="colorPrimaryDark">#0F0B09</item>
-        <item name="colorAccent">#E0461F</item>
-        <item name="android:windowBackground">#0F0B09</item>
-        <item name="android:statusBarColor">#0F0B09</item>
-        <item name="android:navigationBarColor">#0F0B09</item>
+        <item name="colorPrimary">#E8B84A</item>
+        <item name="colorPrimaryDark">#0A0705</item>
+        <item name="colorAccent">#E8431A</item>
+        <item name="android:windowBackground">#0A0705</item>
+        <item name="android:statusBarColor">#0A0705</item>
+        <item name="android:navigationBarColor">#0A0705</item>
     </style>
 </resources>
