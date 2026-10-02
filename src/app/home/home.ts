@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { QuizService } from '../quiz.service';
 import { Acacia, Backdrop, Wordmark } from '../art';
+import { InstallService } from '../install.service';
 
 @Component({
   selector: 'app-home',
@@ -70,6 +71,11 @@ import { Acacia, Backdrop, Wordmark } from '../art';
           <p class="hint">Open this page in the TV's web browser and tap below to show only the scoreboard.</p>
           <a class="btn ghost block" routerLink="/tv">Use this screen as the TV</a>
         </section>
+      }
+      @if (install.offer; as offer) {
+        <button class="get-app" (click)="install.reopen()">
+          {{ offer === 'android' ? 'Get the Android app' : 'Add to Home Screen' }}
+        </button>
       }
     </main>
   `,
@@ -305,10 +311,26 @@ import { Acacia, Backdrop, Wordmark } from '../art';
     .quiet.stack h2 {
       flex-basis: 100%;
     }
+
+    .get-app {
+      display: block;
+      margin: 14px auto 0;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 0;
+      background: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--cream);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+    }
   `,
 })
 export class Home {
   protected quiz = inject(QuizService);
+  protected install = inject(InstallService);
   private router = inject(Router);
   protected confirmReset = signal(false);
 
