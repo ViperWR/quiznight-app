@@ -19,8 +19,8 @@
     <section
       class="table"
       [class.ranked]="latest() >= 0"
-      [style.--n]="standings().length"
       [style.--rounds]="quiz.rounds.length"
+      [style.--round-w]="layout().roundWidth + 'px'"
     >
       <div class="head line">
         <span class="rank">#</span>
@@ -31,9 +31,15 @@
         <span class="total">Total</span>
       </div>
 
-      <div class="rows">
+      <div class="rows" #rows>
         @for (s of standings(); track s.team.id; let i = $index) {
-          <div class="line row" [class.first]="s.rank === 1 && s.total > 0" [style.--i]="i">
+          <div
+            class="line row"
+            [class.first]="s.rank === 1 && s.total > 0"
+            [style.top.%]="layout().rows[i].top"
+            [style.height.%]="layout().rows[i].height"
+            [style.font-size.px]="layout().rows[i].fontSize"
+          >
             <span class="rank">{{ s.rank }}</span>
             <span class="team">{{ s.team.name }}</span>
             @for (v of s.roundScores; track $index; let j = $index) {

@@ -13,7 +13,10 @@
 .sky,
 .shade {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   pointer-events: none;
 }
 
@@ -57,12 +60,14 @@ header {
   min-width: 0;
   display: flex;
   align-items: center;
+  gap: 2vmin;
   gap: clamp(10px, 2vmin, 28px);
 }
 
 .badge {
   flex: none;
   /* Gives height back to the table as the team list grows */
+  width: 9vmin;
   width: clamp(3rem, calc(12vmin - var(--n, 8) * 0.25vmin), 8rem);
   height: auto;
   aspect-ratio: 1;
@@ -70,6 +75,7 @@ header {
 }
 
 h1 {
+  font-size: 7vmin;
   font-size: clamp(1.8rem, 7vmin, 5rem);
   line-height: 1.05;
   overflow-wrap: anywhere;
@@ -80,6 +86,7 @@ h1 {
   align-items: center;
   gap: 0.35em;
   margin: 0;
+  font-size: 4.2vmin;
   font-size: clamp(1.1rem, 4.2vmin, 3rem);
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
@@ -96,28 +103,19 @@ h1 {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  /* How many times taller the top three bars are; 1 until a round is on the board */
-  --podium: 1;
-  --min-units: 6.5;
-  --round-w: min(5.5vw, calc(38vw / var(--rounds)));
-  /* Largest the row text may get: keeps room for about 17 letters of team name */
-  --cap: min(4.4vw, calc((72vw - var(--rounds) * (var(--round-w) + 1vw)) / 12));
-}
-
-.table.ranked {
-  --podium: 1.55;
 }
 
 .line {
   display: grid;
   /* Column widths in vw so the header and the (much larger) row text line up */
-  grid-template-columns: 6vw minmax(0, 1fr) repeat(var(--rounds), var(--round-w)) 11vw;
+  grid-template-columns: 6vw minmax(0, 1fr) repeat(var(--rounds), var(--round-w, 5.5vw)) 11vw;
   align-items: center;
   gap: 1vw;
   padding: 0 1.5vw;
 }
 
 .head {
+  font-size: 2.4vmin;
   font-size: clamp(0.8rem, 2.4vmin, 1.7rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -131,36 +129,30 @@ h1 {
   position: relative;
   flex: 1;
   min-height: 0;
-  container-type: size;
 }
 
-/* The table height is shared out in units: an ordinary row takes one, a top-three row
-   takes --podium of them. Rows are placed by --i so they can slide when the order changes. */
+/* Rows are placed one by one so they can slide when the order changes. Each row's top and
+   height (a share of the list) and its text size are worked out in board.ts and set inline:
+   older TVs and Chromecasts ignore the CSS that could do the sums, which left every row
+   piled on the first one. */
 .row {
-  --extra: calc(var(--podium) - 1);
-  /* --min-units stops a short list from stretching into a few enormous bars */
-  --units: max(var(--n) + min(var(--n), 3) * var(--extra), var(--min-units));
-  --unit: calc(100cqh / var(--units));
-  /* 1 for the top three places, 0 below */
-  --top: clamp(0, 3 - var(--i), 1);
-  --h: calc(var(--unit) * (1 + var(--top) * var(--extra)));
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
-  height: var(--h);
-  transform: translateY(calc(var(--unit) * (var(--i) + min(var(--i), 3) * var(--extra))));
-  transition: transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1), height 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
+  /* Keeps the bar drawn by ::before behind this row's text but in front of the artwork */
+  z-index: 0;
+  transition: top 900ms cubic-bezier(0.2, 0.8, 0.2, 1), height 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
     font-size 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  /* Text fills the bar; with only a few teams the width cap takes over */
-  font-size: min(calc(var(--h) * 0.68), calc(var(--cap) * (1 + var(--top) * var(--extra) * 0.2)));
   line-height: 1.15;
 }
 
 .row::before {
   content: '';
   position: absolute;
-  inset: 4% 0;
+  top: 4%;
+  right: 0;
+  bottom: 4%;
+  left: 0;
   border-radius: 0.5em;
   background: linear-gradient(
     180deg,
@@ -310,10 +302,6 @@ h1 {
 
 /* Phones held upright: drop the per-round columns so names and totals fit. */
 @media (orientation: portrait) and (max-width: 700px) {
-  .table {
-    --cap: 5vw;
-    --min-units: 11;
-  }
   .line,
   .head {
     grid-template-columns: 10vw minmax(0, 1fr) 16vw;
@@ -330,10 +318,12 @@ h1 {
 }
 
 .waiting h1 {
+  font-size: 9vmin;
   font-size: clamp(1.9rem, 9vmin, 7rem);
 }
 
 .waiting p {
+  font-size: 3vmin;
   font-size: clamp(1rem, 3vmin, 2rem);
   color: var(--cream);
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
