@@ -1,0 +1,377 @@
+.board {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: max(2vh, env(safe-area-inset-top)) max(3vw, env(safe-area-inset-right)) 3vh
+    max(3vw, env(safe-area-inset-left));
+  background: var(--ink);
+}
+
+.sky,
+.shade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* Darkest behind the title and column headings, lifting towards the foot of the picture */
+.shade {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 7, 5, 0.8) 0%,
+    rgba(10, 7, 5, 0.5) 32%,
+    rgba(10, 7, 5, 0.18) 100%
+  );
+}
+
+header,
+.table,
+.waiting {
+  position: relative;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2vw;
+  flex-wrap: wrap;
+  padding-bottom: 1.6vh;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--gold-lo) 8%,
+      var(--gold) 50%,
+      var(--gold-lo) 92%,
+      transparent 100%
+    )
+    1;
+  margin-bottom: 1.8vh;
+}
+
+.titles {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 2vmin;
+  gap: clamp(10px, 2vmin, 28px);
+}
+
+.badge {
+  flex: none;
+  /* Gives height back to the table as the team list grows */
+  width: 9vmin;
+  width: clamp(3rem, calc(12vmin - var(--n, 8) * 0.25vmin), 8rem);
+  height: auto;
+  aspect-ratio: 1;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
+}
+
+h1 {
+  font-size: 7vmin;
+  font-size: clamp(1.8rem, 7vmin, 5rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0;
+  font-size: 4.2vmin;
+  font-size: clamp(1.1rem, 4.2vmin, 3rem);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.trophy {
+  height: 1.9em;
+  width: auto;
+  filter: drop-shadow(0 0 0.5em rgba(255, 215, 106, 0.45));
+  animation: trophyIn 700ms var(--ease-spring) both;
+}
+
+.table {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.line {
+  display: grid;
+  /* Column widths in vw so the header and the (much larger) row text line up */
+  grid-template-columns: 6vw minmax(0, 1fr) repeat(var(--rounds), var(--round-w, 5.5vw)) 11vw;
+  align-items: center;
+  gap: 1vw;
+  padding: 0 1.5vw;
+}
+
+.head {
+  font-size: 2.4vmin;
+  font-size: clamp(0.8rem, 2.4vmin, 1.7rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cream-2);
+  padding-bottom: 0.8vh;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.rows {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Rows are placed one by one so they can slide when the order changes. Each row's top and
+   height (a share of the list) and its text size are worked out in board.ts and set inline:
+   older TVs and Chromecasts ignore the CSS that could do the sums, which left every row
+   piled on the first one. */
+.row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* Keeps the bar drawn by ::before behind this row's text but in front of the artwork */
+  z-index: 0;
+  transition: top 900ms cubic-bezier(0.2, 0.8, 0.2, 1), height 900ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    font-size 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  line-height: 1.15;
+}
+
+.row::before {
+  content: '';
+  position: absolute;
+  top: 4%;
+  right: 0;
+  bottom: 4%;
+  left: 0;
+  border-radius: 0.5em;
+  background: linear-gradient(
+    180deg,
+    rgba(36, 28, 20, 0.84) 0%,
+    rgba(22, 16, 12, 0.8) 100%
+  );
+  border: 1px solid rgba(228, 178, 58, 0.4);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  z-index: -1;
+  transition: background 400ms var(--ease-out), border-color 400ms, box-shadow 400ms;
+}
+
+.row:nth-child(even)::before {
+  background: linear-gradient(
+    180deg,
+    rgba(42, 32, 24, 0.78) 0%,
+    rgba(26, 20, 15, 0.74) 100%
+  );
+}
+
+.row.first::before {
+  background: linear-gradient(
+    135deg,
+    #fff4c2 0%,
+    var(--gold-hi) 25%,
+    var(--gold) 65%,
+    #d4a030 100%
+  );
+  border-color: #fff0a0;
+  box-shadow: 0 0 2.5em rgba(255, 215, 106, 0.45), 0 4px 16px rgba(232, 184, 74, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Second and third place: same dark bar, picked out with a brighter gold edge */
+.ranked .row:nth-child(-n + 3):not(.first)::before {
+  border-color: rgba(255, 224, 138, 0.85);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4), 0 0 1.2em rgba(232, 184, 74, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.row.first {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Crown-ish accent for first place rank */
+.row.first .rank {
+  position: relative;
+}
+
+.row.first .rank::after {
+  content: '★';
+  position: absolute;
+  top: -0.55em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.45em;
+  color: var(--sunset-deep);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 4px rgba(232, 67, 26, 0.4));
+}
+
+.rank {
+  font-family: var(--font-display);
+  text-align: center;
+  color: var(--gold-hi);
+  text-shadow: 0 0 12px rgba(232, 184, 74, 0.3);
+}
+
+.first .rank {
+  color: var(--sunset-deep);
+  text-shadow: none;
+}
+
+.team {
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.rnd {
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: 600;
+  opacity: 0.8;
+  transition: opacity 300ms, color 300ms;
+}
+
+.rnd.latest {
+  opacity: 1;
+  color: var(--gold-hi);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(232, 184, 74, 0.35);
+}
+
+.head .rnd.latest {
+  color: var(--gold-hi);
+  text-shadow: none;
+}
+
+.first .rnd.latest {
+  color: var(--sunset-deep);
+  text-shadow: none;
+}
+
+/* Top score of a round: a gold chip, on every team that got it */
+.rnd.best {
+  justify-self: center;
+  min-width: 1.9em;
+  padding: 0 0.3em;
+  border-radius: 0.35em;
+  opacity: 1;
+  font-weight: 800;
+  color: var(--ink);
+  text-shadow: none;
+  background: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 100%);
+  box-shadow: 0 0 0.6em rgba(255, 215, 106, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* The leader's bar is already gold, so the chip flips to dark */
+.first .rnd.best {
+  color: var(--gold-hi);
+  background: var(--ink-3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.total {
+  font-family: var(--font-display);
+  text-align: right;
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+}
+
+.first .total {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.head .total,
+.head .rank {
+  font-family: var(--font-body);
+  font-size: 1em;
+  color: var(--cream-2);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Phones held upright: drop the per-round columns so names and totals fit. */
+@media (orientation: portrait) and (max-width: 700px) {
+  .line,
+  .head {
+    grid-template-columns: 10vw minmax(0, 1fr) 16vw;
+  }
+  .rnd {
+    display: none;
+  }
+}
+
+.waiting {
+  margin: auto;
+  text-align: center;
+  animation: fadeIn 600ms var(--ease-out);
+}
+
+.waiting h1 {
+  font-size: 9vmin;
+  font-size: clamp(1.9rem, 9vmin, 7rem);
+}
+
+.waiting p {
+  font-size: 3vmin;
+  font-size: clamp(1rem, 3vmin, 2rem);
+  color: var(--cream);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  margin-top: 1.2em;
+}
+
+.controls {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+  z-index: 10;
+}
+
+.controls.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+@keyframes trophyIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
+  .row.first .rank::after {
+    display: none;
+  }
+}

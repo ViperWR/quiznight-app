@@ -1,0 +1,37 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx ng build --base-href "/${{ github.event.repository.name }}/"
+      # receiver.html is the page the Chromecast loads; tv/ is the short address
+      # typed into a TV browser; 404.html serves the app shell for unknown paths;
+      # .nojekyll stops Pages running Jekyll
+      - run: |
+          cd dist/quiznight-app/browser
+          cp index.html 404.html
+          sed 's#</head>#<script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script></head>#' index.html > receiver.html
+          mkdir -p tv && cp index.html tv/index.html
+          touch .nojekyll
+      # GitHub Pages serves the gh-pages branch (Settings > Pages > Deploy from a branch)
+      - if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/quiznight-app/browser
