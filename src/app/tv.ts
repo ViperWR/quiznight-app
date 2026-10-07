@@ -10,7 +10,14 @@ import { Backdrop, Wordmark } from './art';
   imports: [Board, Backdrop, Wordmark],
   template: `
     @if (live.tvConnected() && quiz.quiz()) {
-      <app-board tv="1" />
+      <div class="live">
+        <app-board tv="1" />
+        <!-- Not the right game? The host can always get back to a fresh code from here -->
+        <div class="corner">
+          <span>Code <strong>{{ live.tvCode() }}</strong></span>
+          <button class="btn ghost small" (click)="live.newTvCode()">New code</button>
+        </div>
+      </div>
     } @else {
       <div class="pair">
         <app-backdrop class="sky" />
@@ -30,6 +37,29 @@ import { Backdrop, Wordmark } from './art';
     }
   `,
   styles: `
+    .live {
+      position: relative;
+    }
+    .corner {
+      position: fixed;
+      right: 3vw;
+      bottom: 3vh;
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 0.4em 0.6em 0.4em 1em;
+      border-radius: 999px;
+      background: rgba(10, 7, 5, 0.7);
+      color: var(--cream);
+      font-size: clamp(0.8rem, 1.6vmin, 1.2rem);
+      opacity: 0.55;
+      transition: opacity 0.2s;
+      z-index: 10;
+    }
+    .corner:hover,
+    .corner:focus-within {
+      opacity: 1;
+    }
     .pair {
       position: relative;
       height: 100vh;
