@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1791179824697,
+  "timestamp": 1791387882464,
   "index": "/quiznight-app/index.html",
   "assetGroups": [
     {
@@ -16,7 +16,7 @@
         "/quiznight-app/fonts/montserrat.woff2",
         "/quiznight-app/fonts/yellowtail-400.woff2",
         "/quiznight-app/index.html",
-        "/quiznight-app/main-ZR3PJ3W2.js",
+        "/quiznight-app/main-NNGTTVML.js",
         "/quiznight-app/manifest.webmanifest",
         "/quiznight-app/styles-U5TCDTST.css"
       ],
@@ -59,7 +59,7 @@
     "/quiznight-app/art/hero-tv.webp": "bd320ff2b80376f8e781d6a082506ad27937ecaa",
     "/quiznight-app/art/trophy.png": "ed50ac8fc6784336684eed4891adc6e12fe1ce5b",
     "/quiznight-app/fonts/abrilfatface-400.woff2": "ceed38b5f7bca67c48b52060285212c0536d5dc1",
-    "/quiznight-app/fonts/fonts.css": "e5c1d634b0a933223a8532fe23acb873aefad77a",
+    "/quiznight-app/fonts/fonts.css": "a49f32b2b5043ae32ad993fc26e94f53952c80f1",
     "/quiznight-app/fonts/montserrat.woff2": "a5ec54920b589ebe2af3bc3bb7754a476db68abf",
     "/quiznight-app/fonts/yellowtail-400.woff2": "9f39f63af40a24e01442e32857704f64ba3be606",
     "/quiznight-app/icons/apple-touch-icon.png": "53aca6dd01700951cdabb1caac64e296f9839570",
@@ -72,9 +72,9 @@
     "/quiznight-app/icons/icon-72x72.png": "d75324558726315ddd56fa6a4b22dc7b7163a663",
     "/quiznight-app/icons/icon-96x96.png": "a225b47310ba2078153709f928b0f5cd06dcd920",
     "/quiznight-app/icons/icon-maskable-512x512.png": "fe0d81966aab665364b12f66fcf92010ba51fc82",
-    "/quiznight-app/index.html": "fb941fe1467aa0503172094c26269acc66c42e36",
-    "/quiznight-app/main-ZR3PJ3W2.js": "96a04acb4727d89a7a90d13ea5b5a1302494e15d",
-    "/quiznight-app/manifest.webmanifest": "9ca7ab99077b57232ff51090728f54cf63f3b8d6",
+    "/quiznight-app/index.html": "2ebcf7370703e6619cc8df0b626a3bf912b55f8d",
+    "/quiznight-app/main-NNGTTVML.js": "cc1cea6835e85288d95920de971065b6f1e7eec3",
+    "/quiznight-app/manifest.webmanifest": "c87f494e880d8312a3944b79c410524c3f538403",
     "/quiznight-app/styles-U5TCDTST.css": "2eaf8c576669128b3915dea3871c18eec00c952d"
   },
   "navigationUrls": [
