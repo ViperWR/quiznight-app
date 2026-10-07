@@ -6,7 +6,12 @@
     <header [style.--n]="standings().length">
       <div class="titles">
         <img class="badge" src="art/badge.png" alt="Quiz Night" />
-        <h1 class="display gold">{{ quiz.title }}</h1>
+        <div class="names">
+          @if (quiz.venue) {
+            <p class="venue display">{{ quiz.venue }}</p>
+          }
+          <h1 class="display gold">{{ quiz.title }}</h1>
+        </div>
       </div>
       <p class="script subtitle">
         @if (final()) {

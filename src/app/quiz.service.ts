@@ -2,6 +2,8 @@ import { Injectable, computed, effect, signal } from '@angular/core';
 import { Quiz, Round, Standing, Team } from './quiz.model';
 
 const STORAGE_KEY = 'quiznight.quiz.v1';
+/** The venue typed in last, offered again for the next quiz */
+const VENUE_KEY = 'quiznight.venue';
 
 function newId(): string {
   return Math.random().toString(36).slice(2, 10);
@@ -21,6 +23,11 @@ export class QuizService {
   readonly liveStandings = computed(() => this.standings(false));
 
   readonly revealedCount = computed(() => this.quiz()?.revealed.filter(Boolean).length ?? 0);
+
+  /** Venue typed in for the last quiz on this device */
+  readonly lastVenue = signal(readVenue());
+  /** Venue to show: the current quiz's, else the last one used here (none on a TV waiting for a phone) */
+  readonly venue = computed(() => this.quiz()?.venue?.trim() || (this.persist ? this.lastVenue() : ''));
 
   /** Off on a TV showing someone else's quiz, so it never overwrites a quiz saved on this device. */
   private persist = true;
@@ -64,6 +71,7 @@ export class QuizService {
   /** Show a quiz that lives on another device (TV mode): stop saving and start empty. */
   displayOnly() {
     this.persist = false;
+    this.lastVenue.set('');
     this.quiz.set(null);
   }
 
@@ -78,11 +86,13 @@ export class QuizService {
     this.quiz.set({ ...fn(q), updatedAt: Date.now() });
   }
 
-  create(title: string, rounds: Round[], teamNames: string[]) {
+  create(venue: string, title: string, rounds: Round[], teamNames: string[]) {
+    this.rememberVenue(venue);
     const teams: Team[] = teamNames.map((name) => ({ id: newId(), name }));
     const scores: Quiz['scores'] = {};
     for (const t of teams) scores[t.id] = rounds.map(() => null);
     this.quiz.set({
+      venue: venue.trim(),
       title: title.trim() || 'Quiz Night',
       rounds,
       teams,
@@ -94,7 +104,8 @@ export class QuizService {
   }
 
   /** Change title and round layout while keeping scores where rounds still exist. */
-  updateSetup(title: string, rounds: Round[]) {
+  updateSetup(venue: string, title: string, rounds: Round[]) {
+    this.rememberVenue(venue);
     this.update((q) => {
       const scores: Quiz['scores'] = {};
       for (const t of q.teams) {
@@ -106,6 +117,7 @@ export class QuizService {
       }
       return {
         ...q,
+        venue: venue.trim(),
         title: title.trim() || 'Quiz Night',
         rounds,
         scores,
@@ -167,6 +179,16 @@ export class QuizService {
     });
   }
 
+  private rememberVenue(venue: string) {
+    const v = venue.trim();
+    this.lastVenue.set(v);
+    try {
+      localStorage.setItem(VENUE_KEY, v);
+    } catch {
+      // storage unavailable; the venue is still on this quiz
+    }
+  }
+
   reset() {
     this.quiz.set(null);
   }
@@ -188,5 +210,13 @@ export class QuizService {
       r.rank = i > 0 && rows[i - 1].total === r.total ? rows[i - 1].rank : i + 1;
     });
     return rows;
+  }
+}
+
+function readVenue(): string {
+  try {
+    return localStorage.getItem(VENUE_KEY) ?? '';
+  } catch {
+    return '';
   }
 }

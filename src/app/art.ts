@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { QuizService } from './quiz.service';
 
 /** Acacia silhouette from the Quiz Night artwork. Takes the text colour, so CSS `color` recolours it. */
 @Component({
@@ -26,6 +27,9 @@ export class Acacia {}
   template: `
     <span class="roundel"><app-acacia /></span>
     <span class="words">
+      @if (venue(); as v) {
+        <span class="venue display">{{ v }}</span>
+      }
       <span class="name display gold">Quiz Night</span>
       <span class="strap">Round <i>·</i> Score <i>·</i> Win</span>
     </span>
@@ -59,6 +63,13 @@ export class Acacia {}
       flex-direction: column;
       filter: drop-shadow(0 0.04em 0.12em rgba(0, 0, 0, 0.6));
     }
+    .venue {
+      margin-bottom: 0.12em;
+      font-size: 0.62em;
+      line-height: 1.05;
+      color: var(--cream);
+      overflow-wrap: anywhere;
+    }
     .name {
       font-size: 1em;
       text-transform: uppercase;
@@ -83,7 +94,9 @@ export class Acacia {}
     }
   `,
 })
-export class Wordmark {}
+export class Wordmark {
+  protected venue = inject(QuizService).venue;
+}
 
 /**
  * Savanna sunset artwork filling its container. Upright screens get the tall crop,

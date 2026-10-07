@@ -9,6 +9,8 @@ export interface Team {
 }
 
 export interface Quiz {
+  /** Where the quiz is held, shown big on the home screen, scoreboard and TV */
+  venue?: string;
   title: string;
   rounds: Round[];
   teams: Team[];
