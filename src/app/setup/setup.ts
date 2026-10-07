@@ -19,7 +19,7 @@ export class Setup {
   private existing = this.quizService.quiz();
   protected editing = !!this.existing;
 
-  protected title = signal(this.existing?.title ?? 'Quiz Night');
+  protected title = signal(this.existing?.title ?? 'Watergat Quiz Night');
   protected rounds = signal<Round[]>(this.existing?.rounds.map((r) => ({ ...r })) ?? defaultRounds(6, 10));
   protected questionsForAll = signal(this.existing?.rounds[0]?.questions ?? 10);
 

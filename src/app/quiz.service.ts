@@ -83,7 +83,7 @@ export class QuizService {
     const scores: Quiz['scores'] = {};
     for (const t of teams) scores[t.id] = rounds.map(() => null);
     this.quiz.set({
-      title: title.trim() || 'Quiz Night',
+      title: title.trim() || 'Watergat Quiz Night',
       rounds,
       teams,
       scores,
@@ -106,7 +106,7 @@ export class QuizService {
       }
       return {
         ...q,
-        title: title.trim() || 'Quiz Night',
+        title: title.trim() || 'Watergat Quiz Night',
         rounds,
         scores,
         revealed: rounds.map((_, i) => q.revealed[i] ?? false),

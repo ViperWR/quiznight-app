@@ -19,13 +19,14 @@ import { Component, input } from '@angular/core';
 })
 export class Acacia {}
 
-/** The Quiz Night title lockup: acacia roundel, name and strapline, set in the app's own fonts. */
+/** The Watergat Quiz Night title lockup: acacia roundel, name and strapline, set in the app's own fonts. */
 @Component({
   selector: 'app-wordmark',
   imports: [Acacia],
   template: `
     <span class="roundel"><app-acacia /></span>
     <span class="words">
+      <span class="kicker">Watergat</span>
       <span class="name display gold">Quiz Night</span>
       <span class="strap">Round <i>·</i> Score <i>·</i> Win</span>
     </span>
@@ -58,6 +59,15 @@ export class Acacia {}
       display: flex;
       flex-direction: column;
       filter: drop-shadow(0 0.04em 0.12em rgba(0, 0, 0, 0.6));
+    }
+    .kicker {
+      margin-bottom: 0.3em;
+      font-size: 0.3em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      white-space: nowrap;
+      color: var(--cream-2);
     }
     .name {
       font-size: 1em;

@@ -1,6 +1,6 @@
 {
-  "name": "Quiz Night Scoreboard",
-  "short_name": "Quiz Night",
+  "name": "Watergat Quiz Night",
+  "short_name": "Watergat Quiz Night",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
