@@ -6,8 +6,16 @@
 <main class="page">
   <section class="card">
     <label class="field">
+      Venue
+      <input type="text" [value]="venue()" (input)="venue.set(str($event))" placeholder="e.g. Watergat Pub &amp; Grill" required />
+    </label>
+    @if (!venue().trim()) {
+      <p class="hint">Type the venue's name. It shows big on the scoreboard and the TV.</p>
+    }
+
+    <label class="field">
       Quiz name
-      <input type="text" [value]="title()" (input)="title.set(str($event))" placeholder="Watergat Quiz Night" />
+      <input type="text" [value]="title()" (input)="title.set(str($event))" placeholder="Quiz Night" />
     </label>
 
     <div class="grid">
@@ -68,7 +76,7 @@
   </section>
 
   <div class="save">
-    <button class="btn sunset block" (click)="save()" [disabled]="!canSave() && !teamName().trim()">
+    <button class="btn sunset block" (click)="save()" [disabled]="!venue().trim() || (!canSave() && !teamName().trim())">
       {{ editing ? 'Save changes' : 'Start the quiz' }}
     </button>
   </div>

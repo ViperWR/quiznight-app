@@ -19,7 +19,8 @@ export class Setup {
   private existing = this.quizService.quiz();
   protected editing = !!this.existing;
 
-  protected title = signal(this.existing?.title ?? 'Watergat Quiz Night');
+  protected venue = signal(this.existing?.venue ?? this.quizService.lastVenue());
+  protected title = signal(this.existing?.title ?? 'Quiz Night');
   protected rounds = signal<Round[]>(this.existing?.rounds.map((r) => ({ ...r })) ?? defaultRounds(6, 10));
   protected questionsForAll = signal(this.existing?.rounds[0]?.questions ?? 10);
 
@@ -34,7 +35,7 @@ export class Setup {
   );
 
   protected totalQuestions = computed(() => this.rounds().reduce((s, r) => s + r.questions, 0));
-  protected canSave = computed(() => this.rounds().length > 0 && this.teams().length > 0);
+  protected canSave = computed(() => this.venue().trim().length > 0 && this.rounds().length > 0 && this.teams().length > 0);
 
   setRoundCount(raw: number) {
     const n = clamp(Math.round(raw), 1, MAX_ROUNDS);
@@ -89,8 +90,8 @@ export class Setup {
     if (this.teamName().trim()) this.addTeam();
     if (!this.canSave()) return;
     const rounds = this.rounds().map((r, i) => ({ ...r, name: r.name.trim() || `Round ${i + 1}` }));
-    if (this.editing) this.quizService.updateSetup(this.title(), rounds);
-    else this.quizService.create(this.title(), rounds, this.draftTeams());
+    if (this.editing) this.quizService.updateSetup(this.venue(), this.title(), rounds);
+    else this.quizService.create(this.venue(), this.title(), rounds, this.draftTeams());
     this.router.navigate(['/score']);
   }
 

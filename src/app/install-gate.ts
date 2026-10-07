@@ -18,7 +18,7 @@ import { APK_URL, InstallService } from './install.service';
 
       @if (install.offer === 'android') {
         <section class="card">
-          <h1 id="install-title">Install the Watergat Quiz Night app</h1>
+          <h1 id="install-title">Install the Quiz Night app</h1>
           <p class="why">The app puts only the scoreboard on a Chromecast or Google TV, and opens full screen.</p>
           <a class="btn sunset block lead" [href]="apk" download="quiz-night.apk" (click)="install.markStarted()">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" /></svg>
@@ -30,13 +30,13 @@ import { APK_URL, InstallService } from './install.service';
           <ol class="steps">
             <li><span>Open the downloaded file <strong class="file">quiz-night.apk</strong> from the notification or your Downloads.</span></li>
             <li><span>If your phone asks, allow installs from this source.</span></li>
-            <li><span>Tap <strong>Install</strong>, then open <strong>Watergat Quiz Night</strong> from your apps.</span></li>
+            <li><span>Tap <strong>Install</strong>, then open <strong>Quiz Night</strong> from your apps.</span></li>
           </ol>
         </section>
         <button class="skip" (click)="install.dismiss()">Continue in the browser</button>
       } @else {
         <section class="card">
-          <h1 id="install-title">Add Watergat Quiz Night to your Home Screen</h1>
+          <h1 id="install-title">Add Quiz Night to your Home Screen</h1>
           <p class="why">It then opens full screen like an app, and works without internet.</p>
           <ol class="steps">
             <li>
@@ -47,7 +47,7 @@ import { APK_URL, InstallService } from './install.service';
               </span>
             </li>
             <li><span>Scroll down and tap <strong>Add to Home Screen</strong>.</span></li>
-            <li><span>Tap <strong>Add</strong>, then open <strong>Watergat Quiz Night</strong> from your Home Screen.</span></li>
+            <li><span>Tap <strong>Add</strong>, then open <strong>Quiz Night</strong> from your Home Screen.</span></li>
           </ol>
           <p class="note">Not in the list? Open this page in Safari.</p>
           <button class="btn block" (click)="install.dismiss()">Not now</button>
