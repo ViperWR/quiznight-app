@@ -14,6 +14,13 @@ const PHONE_KEY = 'quiznight.live.phone';
 const TV_KEY = 'quiznight.live.tv';
 /** ntfy.sh rejects bigger messages */
 const MAX_BYTES = 4000;
+/**
+ * A TV keeps its code through a reload during the night, but not into the next
+ * quiz: ntfy.sh replays its last 12 hours, so an old code would show the old game.
+ */
+const TV_CODE_TTL = 4 * 60 * 60 * 1000;
+/** The phone forgets a TV from a previous night */
+const PHONE_CODE_TTL = 12 * 60 * 60 * 1000;
 
 function read(key: string): string | null {
   try {
@@ -30,6 +37,22 @@ function write(key: string, value: string | null) {
   } catch {
     // storage unavailable; the link just won't survive a reload
   }
+}
+
+/** A stored code, or null when it's missing, from an older version, or idle past its ttl. */
+function readCode(key: string, ttl: number): string | null {
+  try {
+    const { code, at } = JSON.parse(read(key) ?? '');
+    if (typeof code === 'string' && typeof at === 'number' && Date.now() - at < ttl) return code;
+  } catch {
+    // older plain-string value: treat as expired
+  }
+  write(key, null);
+  return null;
+}
+
+function writeCode(key: string, code: string) {
+  write(key, JSON.stringify({ code, at: Date.now() }));
 }
 
 export function normalizeCode(raw: string): string {
@@ -56,7 +79,7 @@ export class LiveService {
   private quiz = inject(QuizService);
 
   // ---- phone side ----
-  readonly phoneCode = signal<string | null>(read(PHONE_KEY));
+  readonly phoneCode = signal<string | null>(readCode(PHONE_KEY, PHONE_CODE_TTL));
   readonly phoneError = signal<string | null>(null);
   readonly sending = signal(false);
   private payload = computed(() => JSON.stringify(boardOnly(this.quiz.quiz())));
@@ -95,7 +118,7 @@ export class LiveService {
     }
     this.phoneError.set(null);
     this.lastSent = '';
-    write(PHONE_KEY, code);
+    writeCode(PHONE_KEY, code);
     this.phoneCode.set(code);
   }
 
@@ -116,6 +139,7 @@ export class LiveService {
       if (!res.ok) throw new Error(String(res.status));
       this.lastSent = body;
       this.phoneError.set(null);
+      writeCode(PHONE_KEY, code);
     } catch {
       this.phoneError.set("Couldn't reach the TV link. Check the phone has internet; it will retry on the next change.");
       // Try again shortly so a brief signal drop doesn't leave the TV behind
@@ -127,15 +151,14 @@ export class LiveService {
 
   // ---------------- TV ----------------
 
-  /** Start listening as the TV; reuses this TV's code across reloads. */
+  /** Start listening as the TV; reuses this TV's code across reloads on the same night. */
   startTv() {
     if (this.tvCode()) return;
     this.quiz.displayOnly();
-    let code = read(TV_KEY);
-    if (!code) {
-      code = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => ALPHABET[b % ALPHABET.length]).join('');
-      write(TV_KEY, code);
-    }
+    const code =
+      readCode(TV_KEY, TV_CODE_TTL) ??
+      Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => ALPHABET[b % ALPHABET.length]).join('');
+    writeCode(TV_KEY, code);
     this.tvCode.set(code);
     this.listen(code);
   }
@@ -157,6 +180,9 @@ export class LiveService {
       if (msg.id) this.lastId = msg.id;
       this.quiz.replace(JSON.parse(msg.message));
       this.tvConnected.set(true);
+      // Keep the code alive while a quiz is running
+      const code = this.tvCode();
+      if (code) writeCode(TV_KEY, code);
     } catch {
       // ignore anything that isn't a quiz
     }
